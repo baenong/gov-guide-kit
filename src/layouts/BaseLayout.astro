@@ -1,0 +1,37 @@
+---
+import siteConfig from '../../site.config';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import Sidebar from '../components/Sidebar.astro';
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+}
+const { title } = Astro.props;
+const { colors, orgName } = siteConfig;
+---
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title} · {orgName}</title>
+    <style define:vars={{ colorPrimary: colors.primary, colorSecondary: colors.secondary, colorAccent: colors.accent }}>
+      :root {
+        --color-primary: var(--colorPrimary);
+        --color-secondary: var(--colorSecondary);
+        --color-accent: var(--colorAccent);
+      }
+    </style>
+  </head>
+  <body>
+    <Header orgName={orgName} logoPath={siteConfig.logoPath} />
+    <div class="guide-layout">
+      <Sidebar />
+      <main class="guide-content">
+        <slot />
+      </main>
+    </div>
+    <Footer orgName={orgName} />
+  </body>
+</html>

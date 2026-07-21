@@ -1,0 +1,28 @@
+---
+import { getCollection } from 'astro:content';
+
+const entries = (await getCollection('guide')).sort((a, b) => a.data.order - b.data.order);
+const currentPath = Astro.url.pathname;
+
+function hrefFor(slug: string): string {
+  return slug === 'index' ? '/' : `/guide/${slug}`;
+}
+---
+<div class="guide-sidebar__backdrop" data-open="false"></div>
+<nav id="guide-sidebar" class="guide-sidebar" data-open="false" aria-label="사이트 메뉴">
+  <ul class="guide-sidebar__list">
+    {entries.map((entry) => {
+      const href = hrefFor(entry.slug);
+      const isCurrent = currentPath === href || currentPath === `${href}/`;
+      return (
+        <li>
+          <a href={href} aria-current={isCurrent ? 'page' : undefined}>{entry.data.title}</a>
+        </li>
+      );
+    })}
+  </ul>
+</nav>
+<script>
+  import { initMobileNav } from '../scripts/mobile-nav';
+  initMobileNav(document);
+</script>

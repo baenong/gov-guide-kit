@@ -1,0 +1,10 @@
+---
+interface Props {
+  orgName: string;
+}
+const { orgName } = Astro.props;
+const year = new Date().getFullYear();
+---
+<footer class="guide-footer">
+  <p>&copy; {year} {orgName}</p>
+</footer>

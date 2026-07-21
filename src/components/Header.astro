@@ -1,0 +1,21 @@
+---
+interface Props {
+  orgName: string;
+  logoPath: string;
+}
+const { orgName, logoPath } = Astro.props;
+---
+<header class="guide-header">
+  <a class="guide-header__brand" href="/">
+    <img src={logoPath} alt={`${orgName} 로고`} class="guide-header__logo" />
+    <span class="guide-header__org">{orgName}</span>
+  </a>
+  <button
+    class="guide-sidebar__toggle"
+    aria-expanded="false"
+    aria-controls="guide-sidebar"
+    type="button"
+  >
+    메뉴
+  </button>
+</header>
