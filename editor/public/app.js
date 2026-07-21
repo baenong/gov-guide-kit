@@ -1,4 +1,5 @@
 import { api } from './api-client.js';
+import { insertAtCursor, SNIPPETS } from './toolbar.js';
 
 export function computeReorderPayload(slugsInDisplayOrder) {
   return slugsInDisplayOrder.map((slug, index) => ({ slug, order: index }));
@@ -85,9 +86,20 @@ async function createNewPage() {
   await loadPage(page.slug);
 }
 
+function wireToolbar() {
+  const textarea = document.getElementById('page-body');
+  document.querySelectorAll('#toolbar [data-snippet]').forEach((button) => {
+    button.addEventListener('click', () => {
+      const snippet = SNIPPETS[button.dataset.snippet];
+      insertAtCursor(textarea, snippet.before, snippet.after);
+    });
+  });
+}
+
 function wireStaticControls() {
   document.getElementById('save-button').addEventListener('click', saveCurrentPage);
   document.getElementById('new-page-button').addEventListener('click', createNewPage);
+  wireToolbar();
 }
 
 async function init() {

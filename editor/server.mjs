@@ -13,6 +13,7 @@ const STATIC_FILES = {
   '/style.css': { file: 'public/style.css', type: 'text/css; charset=utf-8' },
   '/app.js': { file: 'public/app.js', type: 'text/javascript; charset=utf-8' },
   '/api-client.js': { file: 'public/api-client.js', type: 'text/javascript; charset=utf-8' },
+  '/toolbar.js': { file: 'public/toolbar.js', type: 'text/javascript; charset=utf-8' },
 };
 
 async function readJsonBody(req) {
