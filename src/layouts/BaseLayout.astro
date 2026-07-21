@@ -33,5 +33,9 @@ const { colors, orgName } = siteConfig;
       </main>
     </div>
     <Footer orgName={orgName} />
+    <script>
+      import { initCalendars } from '../scripts/calendar';
+      initCalendars(document);
+    </script>
   </body>
 </html>
