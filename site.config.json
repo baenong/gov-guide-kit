@@ -1,0 +1,9 @@
+{
+  "orgName": "기관명",
+  "colors": {
+    "primary": "#1A2D65",
+    "secondary": "#018FD7",
+    "accent": "#7AC38E"
+  },
+  "logoPath": "/assets/logo.svg"
+}
