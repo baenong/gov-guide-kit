@@ -1,0 +1,30 @@
+{
+  "name": "krds-guide-site",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "tsx scripts/check-contrast.ts && astro build",
+    "preview": "astro preview",
+    "test": "vitest run",
+    "test:links": "linkinator dist --recurse"
+  },
+  "dependencies": {
+    "astro": "^4.15.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.14.0",
+    "jsdom": "^24.1.0",
+    "linkinator": "^6.0.4",
+    "rehype-stringify": "^10.0.0",
+    "remark-directive": "^3.0.0",
+    "remark-parse": "^11.0.0",
+    "remark-rehype": "^11.1.0",
+    "tsx": "^4.16.0",
+    "typescript": "^5.5.0",
+    "unified": "^11.0.5",
+    "unist-util-visit": "^5.0.0",
+    "vitest": "^2.0.0",
+    "zod": "^3.23.0"
+  }
+}
