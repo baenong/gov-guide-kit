@@ -51,14 +51,14 @@
 
 ## 기관 설정 (최초 1회)
 
-`site.config.ts`에서 기관명, 색상, 로고 경로를 수정합니다.
+`site.config.json`에서 기관명, 색상, 로고 경로를 수정합니다.
 
-```ts
-export default {
-  orgName: '기관명',
-  colors: { primary: '#1A2D65', secondary: '#018FD7', accent: '#7AC38E' },
-  logoPath: '/assets/logo.svg',
-};
+```json
+{
+  "orgName": "기관명",
+  "colors": { "primary": "#1A2D65", "secondary": "#018FD7", "accent": "#7AC38E" },
+  "logoPath": "/assets/logo.svg"
+}
 ```
 
 ## 개발자용 로컬 명령어
