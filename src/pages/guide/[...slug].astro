@@ -1,0 +1,21 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import TableOfContents from '../../components/TableOfContents.astro';
+
+export async function getStaticPaths() {
+  const entries = await getCollection('guide', ({ slug }) => slug !== 'index');
+  return entries.map((entry) => ({
+    params: { slug: entry.slug },
+    props: { entry },
+  }));
+}
+
+const { entry } = Astro.props;
+const { Content, headings } = await entry.render();
+---
+<BaseLayout title={entry.data.title}>
+  <h1>{entry.data.title}</h1>
+  <TableOfContents headings={headings} />
+  <Content />
+</BaseLayout>

@@ -1,7 +1,14 @@
 ---
+import { getEntry } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import TableOfContents from '../components/TableOfContents.astro';
+
+const entry = await getEntry('guide', 'index');
+if (!entry) throw new Error('src/content/guide/index.md is required');
+const { Content, headings } = await entry.render();
 ---
-<html lang="ko">
-  <body>
-    <p>scaffold placeholder — replaced in Task 8</p>
-  </body>
-</html>
+<BaseLayout title={entry.data.title}>
+  <h1>{entry.data.title}</h1>
+  <TableOfContents headings={headings} />
+  <Content />
+</BaseLayout>

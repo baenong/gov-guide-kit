@@ -1,0 +1,24 @@
+---
+interface Heading {
+  depth: number;
+  slug: string;
+  text: string;
+}
+interface Props {
+  headings: Heading[];
+}
+const { headings } = Astro.props;
+const items = headings.filter((h) => h.depth === 2 || h.depth === 3);
+---
+{items.length > 0 && (
+  <nav class="guide-toc" aria-label="페이지 목차">
+    <p class="guide-toc__label">목차</p>
+    <ul>
+      {items.map((h) => (
+        <li class={`guide-toc__item guide-toc__item--depth${h.depth}`}>
+          <a href={`#${h.slug}`}>{h.text}</a>
+        </li>
+      ))}
+    </ul>
+  </nav>
+)}
