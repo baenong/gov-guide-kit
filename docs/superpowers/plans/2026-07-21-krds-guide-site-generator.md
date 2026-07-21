@@ -393,6 +393,23 @@ const siteConfig: SiteConfig = {
 export default siteConfig;
 ```
 
+- [ ] **Step 5b: Create the placeholder logo referenced by `logoPath`**
+
+`site.config.ts`'s default `logoPath` (`/assets/logo.svg`) is an absolute path served from Astro's `public/` directory. Without a real file there, `Header.astro` (Task 7) renders a broken `<img>` and Task 10's link checker fails the build.
+
+```bash
+mkdir -p public/assets
+```
+
+Create `public/assets/logo.svg`:
+
+```xml
+<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
+  <rect width="32" height="32" rx="6" fill="#FFFFFF" />
+  <text x="16" y="21" font-family="sans-serif" font-size="14" font-weight="700" text-anchor="middle" fill="#1A2D65">로고</text>
+</svg>
+```
+
 - [ ] **Step 6: Create `scripts/check-contrast.ts`**
 
 ```ts
@@ -429,7 +446,7 @@ Expected: prints `[check-contrast] All configured colors meet WCAG AA contrast.`
 - [ ] **Step 8: Commit**
 
 ```bash
-git add site.config.ts src/lib/contrast.ts scripts/check-contrast.ts tests/contrast.test.ts
+git add site.config.ts public/assets/logo.svg src/lib/contrast.ts scripts/check-contrast.ts tests/contrast.test.ts
 git commit -m "feat: add branding config and WCAG contrast build check"
 ```
 
