@@ -1,9 +1,10 @@
 import http from 'node:http';
-import { readFile, writeFile, readdir } from 'node:fs/promises';
+import { readFile, writeFile, readdir, unlink } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { exec } from 'node:child_process';
 import { parseFrontmatter, serializeFrontmatter } from './lib/frontmatter.mjs';
+import { uniqueSlug } from './lib/slug.mjs';
 
 const EDITOR_DIR = path.dirname(fileURLToPath(import.meta.url));
 
@@ -81,6 +82,51 @@ export function createServer(projectRoot) {
         );
         await writeFile(filePath, nextRaw, 'utf-8');
         return sendJson(res, 200, { slug, title, order: existing.order, description, body });
+      }
+
+      if (url.pathname === '/api/pages' && req.method === 'POST') {
+        const { title } = await readJsonBody(req);
+        if (!title) {
+          return sendJson(res, 400, { error: 'title은 필수입니다.' });
+        }
+        const files = await listPageFiles();
+        const existingSlugs = files.map((f) => f.replace(/\.md$/, ''));
+        const slug = uniqueSlug(title, existingSlugs);
+
+        let maxOrder = 0;
+        for (const file of files) {
+          const raw = await readFile(path.join(guideDir, file), 'utf-8');
+          maxOrder = Math.max(maxOrder, parseFrontmatter(raw).order);
+        }
+
+        const order = maxOrder + 1;
+        const raw = serializeFrontmatter({ title, order }, '');
+        await writeFile(path.join(guideDir, `${slug}.md`), raw, 'utf-8');
+        return sendJson(res, 201, { slug, title, order, body: '' });
+      }
+
+      if (pageMatch && req.method === 'DELETE') {
+        const slug = pageMatch[1];
+        if (slug === 'index') {
+          return sendJson(res, 400, { error: '메인 페이지는 삭제할 수 없습니다.' });
+        }
+        await unlink(path.join(guideDir, `${slug}.md`));
+        return sendJson(res, 200, { ok: true });
+      }
+
+      if (url.pathname === '/api/reorder' && req.method === 'PUT') {
+        const { order } = await readJsonBody(req);
+        for (const item of order) {
+          const filePath = path.join(guideDir, `${item.slug}.md`);
+          const raw = await readFile(filePath, 'utf-8');
+          const parsed = parseFrontmatter(raw);
+          const nextRaw = serializeFrontmatter(
+            { title: parsed.title, order: item.order, description: parsed.description },
+            parsed.body,
+          );
+          await writeFile(filePath, nextRaw, 'utf-8');
+        }
+        return sendJson(res, 200, { ok: true });
       }
 
       if (url.pathname === '/api/config' && req.method === 'GET') {
