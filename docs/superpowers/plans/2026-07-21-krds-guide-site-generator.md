@@ -804,13 +804,26 @@ git commit -m "feat: add attachment-card and responsive-image rehype plugins"
   box-sizing: border-box;
 }
 
+html {
+  overflow-x: hidden;
+}
+
 body {
   margin: 0;
+  overflow-x: hidden;
   font-family: 'Pretendard', system-ui, sans-serif;
   font-size: 16px;
   line-height: 1.6;
   color: var(--color-text);
   background: var(--color-bg);
+}
+
+img, svg, table, pre {
+  max-width: 100%;
+}
+
+.guide-content {
+  overflow-wrap: break-word;
 }
 
 h1 { font-size: 32px; }
@@ -971,6 +984,81 @@ a { color: var(--color-secondary); }
   border-radius: 8px;
   padding: 1rem;
   margin: 1.5rem 0;
+}
+
+.guide-calendar__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.75rem;
+}
+
+.guide-calendar__label {
+  font-weight: 700;
+}
+
+.guide-calendar__prev,
+.guide-calendar__next {
+  min-height: 44px;
+  padding: 0.4rem 0.75rem;
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  background: var(--color-bg);
+  color: var(--color-text);
+  cursor: pointer;
+}
+
+.guide-calendar__prev:hover,
+.guide-calendar__next:hover {
+  background: var(--color-bg-muted);
+}
+
+.guide-calendar__grid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 4px;
+}
+
+.guide-calendar__weekday {
+  text-align: center;
+  font-weight: 700;
+  font-size: 14px;
+  padding: 0.4rem 0;
+}
+
+.guide-calendar__day {
+  min-height: 72px;
+  padding: 0.35rem;
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  font-size: 13px;
+  overflow: hidden;
+}
+
+.guide-calendar__day:empty {
+  border-color: transparent;
+}
+
+.guide-calendar__event {
+  display: block;
+  margin-top: 0.25rem;
+  padding: 0.1rem 0.3rem;
+  background: var(--color-secondary);
+  color: #FFFFFF;
+  border-radius: 4px;
+  font-size: 11px;
+  overflow-wrap: break-word;
+}
+
+@media (max-width: 959px) {
+  .guide-calendar__day {
+    min-height: 56px;
+    font-size: 11px;
+  }
+
+  .guide-calendar__event {
+    font-size: 10px;
+  }
 }
 
 @media (max-width: 959px) {
