@@ -1,5 +1,5 @@
 import http from 'node:http';
-import { readFile, writeFile, readdir, unlink } from 'node:fs/promises';
+import { readFile, writeFile, readdir, unlink, mkdir } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { exec } from 'node:child_process';
@@ -27,6 +27,8 @@ function sendJson(res, status, body) {
 export function createServer(projectRoot) {
   const guideDir = path.join(projectRoot, 'src/content/guide');
   const configPath = path.join(projectRoot, 'site.config.json');
+  const imagesDir = path.join(projectRoot, 'public/assets/images');
+  const filesDir = path.join(projectRoot, 'public/assets/files');
 
   async function listPageFiles() {
     return (await readdir(guideDir)).filter((f) => f.endsWith('.md'));
@@ -140,6 +142,19 @@ export function createServer(projectRoot) {
         const body = await readJsonBody(req);
         await writeFile(configPath, `${JSON.stringify(body, null, 2)}\n`, 'utf-8');
         return sendJson(res, 200, body);
+      }
+
+      if (url.pathname === '/api/upload' && req.method === 'POST') {
+        const { filename, dataBase64, kind } = await readJsonBody(req);
+        if (!filename || !dataBase64 || (kind !== 'image' && kind !== 'file')) {
+          return sendJson(res, 400, { error: 'filename, dataBase64, kind(image|file)이 필요합니다.' });
+        }
+        const targetDir = kind === 'image' ? imagesDir : filesDir;
+        const publicSubdir = kind === 'image' ? 'images' : 'files';
+        await mkdir(targetDir, { recursive: true });
+        const safeName = filename.replace(/[\\/]/g, '_');
+        await writeFile(path.join(targetDir, safeName), Buffer.from(dataBase64, 'base64'));
+        return sendJson(res, 201, { path: `/assets/${publicSubdir}/${safeName}` });
       }
 
       sendJson(res, 404, { error: 'Not found' });
