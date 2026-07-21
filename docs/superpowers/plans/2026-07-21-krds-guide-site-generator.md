@@ -1367,7 +1367,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import TableOfContents from '../../components/TableOfContents.astro';
 
 export async function getStaticPaths() {
-  const entries = await getCollection('guide', ({ id }) => id !== 'index');
+  const entries = await getCollection('guide', ({ slug }) => slug !== 'index');
   return entries.map((entry) => ({
     params: { slug: entry.slug },
     props: { entry },
@@ -1566,26 +1566,44 @@ export function renderCalendarMonth(
 ): void {
   const days = buildMonthGrid(year, month, events);
 
-  container.innerHTML = '';
+  // Header (label/prev/next) is created once and reused across month
+  // navigation — replacing it on every render would leave any external
+  // reference to the label element (e.g. a caller reading its text after
+  // clicking "next") pointing at a detached, permanently-stale node.
+  let header = container.querySelector<HTMLElement>('.guide-calendar__header');
+  let label: HTMLElement;
+  let prevButton: HTMLButtonElement;
+  let nextButton: HTMLButtonElement;
 
-  const header = document.createElement('div');
-  header.className = 'guide-calendar__header';
+  if (!header) {
+    header = document.createElement('div');
+    header.className = 'guide-calendar__header';
 
-  const prevButton = document.createElement('button');
-  prevButton.type = 'button';
-  prevButton.className = 'guide-calendar__prev';
-  prevButton.textContent = '이전 달';
+    prevButton = document.createElement('button');
+    prevButton.type = 'button';
+    prevButton.className = 'guide-calendar__prev';
+    prevButton.textContent = '이전 달';
 
-  const label = document.createElement('span');
-  label.className = 'guide-calendar__label';
+    label = document.createElement('span');
+    label.className = 'guide-calendar__label';
+
+    nextButton = document.createElement('button');
+    nextButton.type = 'button';
+    nextButton.className = 'guide-calendar__next';
+    nextButton.textContent = '다음 달';
+
+    header.append(prevButton, label, nextButton);
+    container.appendChild(header);
+  } else {
+    label = header.querySelector<HTMLElement>('.guide-calendar__label')!;
+    prevButton = header.querySelector<HTMLButtonElement>('.guide-calendar__prev')!;
+    nextButton = header.querySelector<HTMLButtonElement>('.guide-calendar__next')!;
+  }
+
   label.textContent = `${year}년 ${month}월`;
 
-  const nextButton = document.createElement('button');
-  nextButton.type = 'button';
-  nextButton.className = 'guide-calendar__next';
-  nextButton.textContent = '다음 달';
-
-  header.append(prevButton, label, nextButton);
+  const oldGrid = container.querySelector('.guide-calendar__grid');
+  oldGrid?.remove();
 
   const grid = document.createElement('div');
   grid.className = 'guide-calendar__grid';
@@ -1615,19 +1633,19 @@ export function renderCalendarMonth(
     grid.appendChild(cell);
   }
 
-  container.append(header, grid);
+  container.appendChild(grid);
 
-  prevButton.addEventListener('click', () => {
+  prevButton.onclick = () => {
     const prevMonth = month === 1 ? 12 : month - 1;
     const prevYear = month === 1 ? year - 1 : year;
     renderCalendarMonth(container, prevYear, prevMonth, events);
-  });
+  };
 
-  nextButton.addEventListener('click', () => {
+  nextButton.onclick = () => {
     const nextMonth = month === 12 ? 1 : month + 1;
     const nextYear = month === 12 ? year + 1 : year;
     renderCalendarMonth(container, nextYear, nextMonth, events);
-  });
+  };
 }
 
 export function initCalendars(root: Document | HTMLElement = document): void {
