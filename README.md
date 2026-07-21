@@ -43,10 +43,10 @@
 6. 첨부파일(hwp/pdf 등)은 일반 링크로 씁니다. 자동으로 다운로드 카드로 바뀝니다.
 
    ```md
-   [2026년 임용등록원서.hwp](assets/files/2026-form.hwp)
+   [2026년 임용등록원서.hwp](/assets/files/2026-form.hwp)
    ```
 
-7. 이미지는 일반 마크다운 문법을 씁니다: `![설명](assets/images/파일명.png)`
+7. 이미지는 일반 마크다운 문법을 씁니다(경로는 반드시 `/`로 시작): `![설명](/assets/images/파일명.png)`
 8. 수정 후 `git push`만 하면 배포는 자동으로 진행됩니다. Vercel은 몇 분 내로, GitHub Pages는 Actions 탭에서 진행 상황을 확인할 수 있습니다.
 
 ## 기관 설정 (최초 1회)
