@@ -69,6 +69,19 @@ describe('GET /api/pages/:slug', () => {
     const res = await fetch(`${baseUrl}/api/pages/nope`);
     expect(res.status).toBe(404);
   });
+
+  it('resolves a URL-encoded Korean slug (e.g. as produced by encodeURIComponent in the client)', async () => {
+    await mkdir(path.join(tmpRoot, 'src/content/guide'), { recursive: true });
+    await writeFile(
+      path.join(tmpRoot, 'src/content/guide/한글-슬러그.md'),
+      '---\ntitle: 한글 슬러그 페이지\norder: 2\n---\n\n본문\n',
+      'utf-8',
+    );
+    const res = await fetch(`${baseUrl}/api/pages/${encodeURIComponent('한글-슬러그')}`);
+    expect(res.status).toBe(200);
+    const page = await res.json();
+    expect(page.title).toBe('한글 슬러그 페이지');
+  });
 });
 
 describe('PUT /api/pages/:slug', () => {

@@ -2,9 +2,24 @@
 <html lang="ko">
   <head>
     <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>가이드 에디터</title>
+    <link rel="stylesheet" href="/style.css" />
   </head>
   <body>
-    <p>placeholder — replaced in Task 8</p>
+    <div class="editor-layout">
+      <aside class="editor-sidebar">
+        <button type="button" id="new-page-button">새 페이지</button>
+        <ul id="page-list"></ul>
+      </aside>
+      <main class="editor-main">
+        <label>제목 <input type="text" id="page-title" /></label>
+        <label>설명 <input type="text" id="page-description" /></label>
+        <div id="toolbar"></div>
+        <textarea id="page-body" rows="20"></textarea>
+        <button type="button" id="save-button">저장</button>
+      </main>
+    </div>
+    <script type="module" src="/app.js"></script>
   </body>
 </html>

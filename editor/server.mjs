@@ -10,6 +10,9 @@ const EDITOR_DIR = path.dirname(fileURLToPath(import.meta.url));
 
 const STATIC_FILES = {
   '/': { file: 'public/index.html', type: 'text/html; charset=utf-8' },
+  '/style.css': { file: 'public/style.css', type: 'text/css; charset=utf-8' },
+  '/app.js': { file: 'public/app.js', type: 'text/javascript; charset=utf-8' },
+  '/api-client.js': { file: 'public/api-client.js', type: 'text/javascript; charset=utf-8' },
 };
 
 async function readJsonBody(req) {
@@ -60,7 +63,7 @@ export function createServer(projectRoot) {
 
       const pageMatch = url.pathname.match(/^\/api\/pages\/([^/]+)$/);
       if (pageMatch && req.method === 'GET') {
-        const slug = pageMatch[1];
+        const slug = decodeURIComponent(pageMatch[1]);
         const filePath = path.join(guideDir, `${slug}.md`);
         let raw;
         try {
@@ -73,7 +76,7 @@ export function createServer(projectRoot) {
       }
 
       if (pageMatch && req.method === 'PUT') {
-        const slug = pageMatch[1];
+        const slug = decodeURIComponent(pageMatch[1]);
         const filePath = path.join(guideDir, `${slug}.md`);
         const existingRaw = await readFile(filePath, 'utf-8');
         const existing = parseFrontmatter(existingRaw);
@@ -108,7 +111,7 @@ export function createServer(projectRoot) {
       }
 
       if (pageMatch && req.method === 'DELETE') {
-        const slug = pageMatch[1];
+        const slug = decodeURIComponent(pageMatch[1]);
         if (slug === 'index') {
           return sendJson(res, 400, { error: '메인 페이지는 삭제할 수 없습니다.' });
         }
