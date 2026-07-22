@@ -33,9 +33,14 @@ const { colors, orgName } = siteConfig;
       </main>
     </div>
     <Footer orgName={orgName} />
+    <button type="button" class="guide-go-top" aria-label="맨 위로 이동">
+      <span class="guide-icon guide-icon--go-top" aria-hidden="true"></span>
+    </button>
     <script>
       import { initCalendars } from '../scripts/calendar';
+      import { initGoTop } from '../scripts/go-top';
       initCalendars(document);
+      initGoTop(document);
     </script>
   </body>
 </html>

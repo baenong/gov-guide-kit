@@ -8,6 +8,7 @@
   --color-bg: #FFFFFF;
   --color-bg-muted: #F4F6F8;
   --color-border: #D8DCE2;
+  --header-height: 64px;
 }
 
 * {
@@ -76,11 +77,39 @@ a:focus-visible {
   text-decoration: none;
 }
 
+.guide-icon {
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+  background-color: currentColor;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
+  -webkit-mask-size: contain;
+  mask-size: contain;
+}
+
+.guide-icon--all {
+  -webkit-mask-image: url('/assets/icons/ico_all.svg');
+  mask-image: url('/assets/icons/ico_all.svg');
+}
+
+.guide-icon--go-top {
+  -webkit-mask-image: url('/assets/icons/ico_go_top.svg');
+  mask-image: url('/assets/icons/ico_go_top.svg');
+}
+
 .guide-header {
   display: flex;
   align-items: center;
+  min-height: var(--header-height);
   padding: 1rem 1.5rem;
   background: var(--color-primary);
+  position: sticky;
+  top: 0;
+  z-index: 30;
 }
 
 .guide-header__brand {
@@ -116,11 +145,26 @@ a:focus-visible {
   padding: 2rem 1rem;
   border-right: 1px solid var(--color-border);
   position: sticky;
-  top: 0;
+  top: var(--header-height);
 }
 
 .guide-sidebar__toggle {
   display: none;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  margin-left: auto;
+  padding: 0;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: #FFFFFF;
+  cursor: pointer;
+}
+
+.guide-sidebar__toggle:hover {
+  background: rgba(255, 255, 255, 0.15);
 }
 
 .guide-sidebar__list {
@@ -312,13 +356,6 @@ a:focus-visible {
 
   .guide-sidebar__toggle {
     display: inline-flex;
-    align-items: center;
-    min-height: 44px;
-    padding: 0 1rem;
-    margin: 1rem 1.5rem 0;
-    border: 1px solid var(--color-border);
-    border-radius: 6px;
-    background: var(--color-bg);
   }
 
   .guide-sidebar {
@@ -346,4 +383,31 @@ a:focus-visible {
   .guide-sidebar__backdrop[data-open='true'] {
     display: block;
   }
+}
+
+.guide-go-top {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  right: 1.5rem;
+  bottom: 1.5rem;
+  width: 48px;
+  height: 48px;
+  border: none;
+  border-radius: 50%;
+  background: var(--color-primary);
+  color: #FFFFFF;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+  cursor: pointer;
+  z-index: 40;
+  transition: background 0.15s ease;
+}
+
+.guide-go-top:hover {
+  background: var(--color-secondary);
+}
+
+.guide-go-top--visible {
+  display: flex;
 }
