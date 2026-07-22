@@ -6,8 +6,10 @@ export function computeReorderPayload(slugsInDisplayOrder) {
 }
 
 let currentSlug = null;
+let cachedPages = [];
 
 function renderPageList(pages) {
+  cachedPages = pages;
   const list = document.getElementById('page-list');
   list.innerHTML = '';
   for (const page of pages) {
@@ -96,10 +98,64 @@ function wireToolbar() {
   });
 }
 
+function wirePageLinkButton() {
+  document.getElementById('page-link-button').addEventListener('click', () => {
+    if (cachedPages.length === 0) {
+      alert('연결할 페이지가 없습니다.');
+      return;
+    }
+    const options = cachedPages.map((p, i) => `${i + 1}. ${p.title}`).join('\n');
+    const choice = prompt(`연결할 페이지 번호를 입력하세요:\n${options}`);
+    const index = Number(choice) - 1;
+    const target = cachedPages[index];
+    if (!target) return;
+    const href = target.slug === 'index' ? '/' : `/guide/${target.slug}`;
+    const textarea = document.getElementById('page-body');
+    insertAtCursor(textarea, `[${target.title}](${href})`, '');
+  });
+}
+
+function pickAndUpload(kind) {
+  return new Promise((resolve) => {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = kind === 'image' ? 'image/*' : '*/*';
+    input.addEventListener('change', () => {
+      const file = input.files[0];
+      if (!file) return resolve(null);
+      const reader = new FileReader();
+      reader.onload = () => {
+        const base64 = reader.result.split(',')[1];
+        resolve({ filename: file.name, dataBase64: base64 });
+      };
+      reader.readAsDataURL(file);
+    });
+    input.click();
+  });
+}
+
+function wireUploadButtons() {
+  document.getElementById('image-button').addEventListener('click', async () => {
+    const picked = await pickAndUpload('image');
+    if (!picked) return;
+    const { path } = await api.upload(picked.filename, picked.dataBase64, 'image');
+    insertAtCursor(document.getElementById('page-body'), `![설명](${path})`, '');
+  });
+
+  document.getElementById('attachment-button').addEventListener('click', async () => {
+    const picked = await pickAndUpload('file');
+    if (!picked) return;
+    const { path } = await api.upload(picked.filename, picked.dataBase64, 'file');
+    insertAtCursor(document.getElementById('page-body'), `[${picked.filename}](${path})`, '');
+  });
+}
+
 function wireStaticControls() {
   document.getElementById('save-button').addEventListener('click', saveCurrentPage);
   document.getElementById('new-page-button').addEventListener('click', createNewPage);
   wireToolbar();
+  wirePageLinkButton();
+  wireUploadButtons();
 }
 
 async function init() {
