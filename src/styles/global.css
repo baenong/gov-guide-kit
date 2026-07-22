@@ -40,7 +40,27 @@ h1 { font-size: 32px; }
 h2 { font-size: 24px; margin-top: 2.5rem; }
 h3 { font-size: 18px; margin-top: 2rem; }
 
-a { color: var(--color-secondary); }
+a {
+  color: var(--color-secondary);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
+  transition: text-decoration-thickness 0.15s ease;
+}
+
+a:hover {
+  text-decoration-thickness: 2px;
+}
+
+a:visited {
+  color: #5917b8;
+}
+
+a:focus-visible {
+  outline: 2px solid var(--color-secondary);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
 
 .guide-header {
   display: flex;
