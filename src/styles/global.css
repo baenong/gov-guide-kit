@@ -356,6 +356,12 @@ a:focus-visible {
 @media (max-width: 959px) {
   .guide-layout {
     flex-direction: column;
+    /* align-items: flex-start controls the cross axis, which becomes
+       horizontal once flex-direction switches to column here — without
+       overriding it to stretch, .guide-content (and anything inside it,
+       like the TOC) shrinks to its own content width instead of filling
+       the screen. */
+    align-items: stretch;
   }
 
   .guide-sidebar__toggle {
