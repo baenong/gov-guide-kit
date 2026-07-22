@@ -40,7 +40,17 @@ h1 { font-size: 32px; }
 h2 { font-size: 24px; margin-top: 2.5rem; }
 h3 { font-size: 18px; margin-top: 2rem; }
 
-a {
+a:focus-visible {
+  outline: 2px solid var(--color-secondary);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+/* Only prose links inside page body content get the "styled hyperlink"
+   treatment (color/underline/visited). Chrome elements (header brand,
+   sidebar nav, TOC, attachment cards) style their own links explicitly and
+   should never look like inline hyperlinks. */
+.guide-content a:not(.guide-attachment-card) {
   color: var(--color-secondary);
   text-decoration: underline;
   text-decoration-thickness: 1px;
@@ -48,18 +58,22 @@ a {
   transition: text-decoration-thickness 0.15s ease;
 }
 
-a:hover {
+.guide-content a:not(.guide-attachment-card):hover {
   text-decoration-thickness: 2px;
 }
 
-a:visited {
+.guide-content a:not(.guide-attachment-card):visited {
   color: #5917b8;
 }
 
-a:focus-visible {
-  outline: 2px solid var(--color-secondary);
-  outline-offset: 2px;
-  border-radius: 2px;
+/* The table of contents only jumps to anchors within the same page — it
+   reads as a navigation list, not a prose hyperlink, so it stays plain
+   (matching the sidebar/header treatment) even though it's rendered inside
+   .guide-content. */
+.guide-content .guide-toc a,
+.guide-content .guide-toc a:visited {
+  color: inherit;
+  text-decoration: none;
 }
 
 .guide-header {
