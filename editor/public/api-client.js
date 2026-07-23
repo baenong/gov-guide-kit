@@ -42,4 +42,11 @@ export const api = {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ filename, dataBase64, kind }),
     }),
+  getVariables: () => request('/api/variables'),
+  saveVariables: (variables) =>
+    request('/api/variables', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(variables),
+    }),
 };

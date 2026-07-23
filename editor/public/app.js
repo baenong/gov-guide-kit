@@ -5,6 +5,10 @@ export function computeReorderPayload(slugsInDisplayOrder) {
   return slugsInDisplayOrder.map((slug, index) => ({ slug, order: index }));
 }
 
+export function isValidVariableKey(key) {
+  return typeof key === 'string' && key.trim().length > 0 && !key.includes('{{') && !key.includes('}}') && !key.includes('\n');
+}
+
 let currentSlug = null;
 let cachedPages = [];
 
