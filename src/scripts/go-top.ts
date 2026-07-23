@@ -1,4 +1,4 @@
-export function shouldShowGoTop(scrollY: number, threshold = 300): boolean {
+export function shouldShowGoTop(scrollY: number, threshold = 150): boolean {
   return scrollY > threshold;
 }
 
