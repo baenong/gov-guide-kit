@@ -338,6 +338,10 @@ a:focus-visible {
   overflow: hidden;
 }
 
+.guide-calendar__day-number {
+  display: block;
+}
+
 .guide-calendar__day:empty {
   border-color: transparent;
 }

@@ -63,6 +63,7 @@ export function renderCalendarMonth(
     if (day.inCurrentMonth) {
       cell.dataset.day = String(day.dayOfMonth);
       const dayNumber = document.createElement('span');
+      dayNumber.className = 'guide-calendar__day-number';
       dayNumber.textContent = String(day.dayOfMonth);
       cell.appendChild(dayNumber);
       for (const event of day.events) {
