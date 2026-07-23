@@ -1,11 +1,84 @@
 # KRDS 민원 안내 사이트 템플릿
 
-공공기관이 포크해서 사용하는 재사용 가능한 안내 사이트 템플릿입니다. 로그인·검색·백엔드 없이, 마크다운 콘텐츠를 KRDS 스타일의 정적 사이트로 자동 변환합니다.
+공공기관이 복사해서 쓰는 재사용 가능한 안내 사이트 템플릿입니다. 로그인·검색·백엔드 없이, 마크다운(또는 GUI 에디터)으로 작성한 콘텐츠를 KRDS 스타일의 정적 사이트로 자동 변환해 GitHub Pages 또는 Vercel에 배포합니다.
 
-## 콘텐츠 작성자 가이드 (비개발자용)
+## 전체 흐름 한눈에 보기
 
-1. `src/content/guide/` 폴더의 `.md` 파일만 수정합니다. 다른 폴더/파일은 건드릴 필요가 없습니다.
-2. 파일 맨 위에는 아래처럼 정보를 적습니다.
+1. 이 저장소를 복사한다 (GitHub "Use this template" 또는 Fork)
+2. `site.config.json`에 기관명·색상·로고를 적어 우리 기관 사이트로 만든다
+3. Vercel 또는 GitHub Pages 중 하나를 연결한다 (한 번만 하면 됨)
+4. `npm run editor`로 로컬 GUI 에디터를 열어 페이지 내용을 작성한다 (마크다운 문법 몰라도 됨)
+5. 변경사항을 저장(`git push`)하면 몇 분 안에 실제 웹사이트에 반영된다
+
+아래 순서대로 따라 하면 됩니다.
+
+## 1단계. 저장소 복사하기
+
+GitHub에서 이 저장소를 열고 우측 상단의 **"Use this template"** 버튼(또는 **Fork**)을 눌러 내 계정으로 복사합니다. 이후 작업은 전부 복사된 내 저장소에서 진행합니다.
+
+## 2단계. 우리 기관 정보 설정하기 (최초 1회)
+
+저장소 루트의 `site.config.json` 파일을 아래처럼 수정합니다.
+
+```json
+{
+  "orgName": "기관명",
+  "colors": { "primary": "#1A2D65", "secondary": "#018FD7", "accent": "#7AC38E" },
+  "logoPath": "/assets/logo.svg"
+}
+```
+
+- `orgName`: 헤더에 표시될 기관명
+- `colors`: 사이트 전체에 쓰이는 주요 색상 (기본색/보조색/강조색)
+- `logoPath`: 로고 이미지 경로. `public/assets/` 폴더에 로고 파일을 넣고 그 경로를 적습니다 (예: `public/assets/logo.svg`에 파일을 두면 `/assets/logo.svg`).
+
+GitHub 웹사이트에서 `site.config.json` 파일을 열어 연필(수정) 아이콘을 누르면 코드를 몰라도 수정 후 바로 커밋할 수 있습니다.
+
+## 3단계. 배포 연결하기 (최초 1회, 둘 중 하나 선택)
+
+### 옵션 A: Vercel (추천 — 설정이 더 간단함)
+
+1. [vercel.com](https://vercel.com)에 GitHub 계정으로 로그인합니다.
+2. "New Project"에서 방금 복사한 저장소를 선택합니다.
+3. 별도 설정 없이 "Deploy"를 누르면 끝입니다. 이후 저장소에 `git push`할 때마다 자동으로 다시 배포됩니다.
+
+### 옵션 B: GitHub Pages (Vercel 계정 없이 무료로 운영 가능)
+
+1. 저장소의 **Settings → Pages**로 이동합니다.
+2. "Build and deployment" 항목의 소스를 **GitHub Actions**로 지정합니다.
+3. 저장소에 이미 포함된 `.github/workflows/deploy.yml`이 `main` 브랜치에 push할 때마다 자동으로 빌드/배포합니다. 진행 상황은 저장소의 **Actions** 탭에서 확인할 수 있습니다.
+
+## 4단계. 콘텐츠 작성하기
+
+### 방법 1: 로컬 GUI 에디터 사용 (추천, 비개발자용)
+
+마크다운 문법을 몰라도 화면에서 버튼을 눌러 콘텐츠를 작성할 수 있는 도구가 포함되어 있습니다.
+
+1. 컴퓨터에 [Node.js](https://nodejs.org) (20 이상)를 설치합니다.
+2. 저장소를 내 컴퓨터에 내려받습니다 (GitHub Desktop을 쓰면 명령어 없이 가능합니다).
+3. 터미널(또는 GitHub Desktop의 "Open in Terminal")에서 아래 명령을 한 번 실행합니다.
+
+   ```bash
+   npm install
+   ```
+
+4. 이후 콘텐츠를 작성할 때마다 아래 명령으로 에디터를 엽니다.
+
+   ```bash
+   npm run editor
+   ```
+
+   브라우저가 자동으로 열리며 `http://localhost:4322`에서 에디터 화면이 나타납니다.
+
+5. 왼쪽에서 페이지를 선택하거나 "새 페이지"로 새로 만듭니다. 제목/설명/본문을 입력하고, 툴바 버튼(중제목·소제목·공지·주의·캘린더·페이지 링크·이미지·첨부파일)을 눌러 서식을 삽입합니다.
+6. 반복해서 쓰이는 값(등록 마감일 등)은 왼쪽 사이드바 하단의 "변수" 섹션에서 한 번만 등록해두면, "삽입" 버튼으로 아무 페이지에나 가져다 쓸 수 있습니다. 값을 나중에 바꾸면 그 변수를 쓰는 모든 페이지가 함께 갱신됩니다.
+7. 작성이 끝나면 "저장" 버튼을 누릅니다. (이 저장은 내 컴퓨터의 파일에만 반영됩니다 — 실제 웹사이트에 올리려면 아래 5단계가 필요합니다.)
+
+### 방법 2: `.md` 파일 직접 편집 (개발자 또는 GitHub 웹 화면에서 직접 수정하고 싶은 경우)
+
+`src/content/guide/` 폴더의 `.md` 파일을 직접 열어 아래 문법으로 작성합니다.
+
+1. 파일 맨 위에는 이렇게 적습니다.
 
    ```md
    ---
@@ -18,7 +91,7 @@
 
    `order` 숫자가 작을수록 좌측 메뉴 위쪽에 표시됩니다.
 
-3. 강조 박스는 아래처럼 씁니다.
+2. 강조 박스:
 
    ```md
    :::notice
@@ -30,7 +103,7 @@
    :::
    ```
 
-4. 캘린더는 아래처럼 날짜와 제목을 나열합니다.
+3. 캘린더:
 
    ```md
    :::calendar
@@ -39,15 +112,15 @@
    :::
    ```
 
-5. 다른 페이지로 링크: `[임용등록 안내](/guide/registration)`
-6. 첨부파일(hwp/pdf 등)은 일반 링크로 씁니다. 자동으로 다운로드 카드로 바뀝니다.
+4. 다른 페이지로 링크: `[임용등록 안내](/guide/registration)`
+5. 첨부파일(hwp/pdf 등)은 일반 링크로 씁니다. 자동으로 다운로드 카드로 바뀝니다.
 
    ```md
    [2026년 임용등록원서.hwp](/assets/files/2026-form.hwp)
    ```
 
-7. 이미지는 일반 마크다운 문법을 씁니다(경로는 반드시 `/`로 시작): `![설명](/assets/images/파일명.png)`
-8. 반복해서 쓰이는 값(예: 등록 마감일)은 `site.variables.json`에 한 번만 적어두고, 본문에서는 `{{등록일}}`처럼 참조합니다. 값을 바꾸면 이걸 쓰는 모든 페이지가 다음 빌드에 자동으로 갱신됩니다.
+6. 이미지는 일반 마크다운 문법을 씁니다(경로는 반드시 `/`로 시작): `![설명](/assets/images/파일명.png)`
+7. 반복해서 쓰이는 값은 `site.variables.json`에 한 번만 적어두고, 본문에서는 `{{등록일}}`처럼 참조합니다.
 
    ```json
    { "등록일": "2026-08-15" }
@@ -57,31 +130,32 @@
    등록 마감은 {{등록일}}까지입니다.
    ```
 
-9. 수정 후 `git push`만 하면 배포는 자동으로 진행됩니다. Vercel은 몇 분 내로, GitHub Pages는 Actions 탭에서 진행 상황을 확인할 수 있습니다.
+## 5단계. 변경사항을 실제 웹사이트에 반영하기
 
-## 기관 설정 (최초 1회)
+에디터에서 "저장"을 누르거나 `.md` 파일을 직접 고친 것만으로는 실제 웹사이트가 바뀌지 않습니다. 변경사항을 GitHub 저장소에 올려야(push) 3단계에서 연결한 Vercel 또는 GitHub Pages가 자동으로 새로 빌드합니다.
 
-`site.config.json`에서 기관명, 색상, 로고 경로를 수정합니다.
+- **GitHub Desktop을 쓰는 경우**: 변경된 파일 목록이 자동으로 보입니다. 하단에 커밋 메시지(예: "임용등록 안내 페이지 수정")를 적고 "Commit to main" → "Push origin"을 누르면 끝입니다.
+- **터미널을 쓰는 경우**:
 
-```json
-{
-  "orgName": "기관명",
-  "colors": { "primary": "#1A2D65", "secondary": "#018FD7", "accent": "#7AC38E" },
-  "logoPath": "/assets/logo.svg"
-}
-```
+  ```bash
+  git add -A
+  git commit -m "임용등록 안내 페이지 수정"
+  git push
+  ```
+
+이후 Vercel은 1~2분 내로, GitHub Pages는 저장소의 **Actions** 탭에서 진행 상황을 확인할 수 있습니다.
 
 ## 개발자용 로컬 명령어
 
 ```bash
 npm install
-npm run dev       # http://localhost:4321
-npm run build     # 정적 빌드 (front matter/색상 대비 오류가 있으면 표시됨)
-npm run test      # 단위 테스트
-npm run test:links # 빌드 산출물의 깨진 링크 검사
+npm run dev        # 미리보기: http://localhost:4321
+npm run editor      # 로컬 GUI 에디터: http://localhost:4322
+npm run build       # 정적 빌드 (front matter/색상 대비 오류가 있으면 표시됨)
+npm run test        # 단위 테스트
+npm run test:links  # 빌드 산출물의 깨진 링크 검사
 ```
 
-## 배포
+## 라이선스
 
-- **Vercel**: 저장소를 Vercel에 연결하면 `main` push 시 자동 빌드/배포됩니다. 별도 설정이 필요 없습니다.
-- **GitHub Pages**: 저장소 Settings → Pages에서 소스를 "GitHub Actions"로 지정하면 `.github/workflows/deploy.yml`이 `main` push마다 자동 배포합니다.
+[MIT](./LICENSE) — 자유롭게 포크·수정·배포할 수 있습니다.
