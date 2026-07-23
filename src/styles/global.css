@@ -370,6 +370,41 @@ a:focus-visible {
   overflow-wrap: break-word;
 }
 
+.guide-calendar__day[data-day] {
+  cursor: pointer;
+}
+
+.guide-calendar__day[data-selected='true'] {
+  border: 2px solid var(--color-primary);
+}
+
+.guide-calendar__detail {
+  margin-top: 1rem;
+  padding: 1rem;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  background: var(--color-bg-muted);
+}
+
+.guide-calendar__detail:empty {
+  display: none;
+}
+
+.guide-calendar__detail-heading {
+  margin: 0 0 0.5rem;
+  font-weight: 700;
+}
+
+.guide-calendar__detail-empty {
+  margin: 0;
+  color: var(--color-text);
+}
+
+.guide-calendar__detail-list {
+  margin: 0;
+  padding-left: 1.25rem;
+}
+
 @media (max-width: 959px) {
   .guide-calendar__day {
     font-size: 11px;

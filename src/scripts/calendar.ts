@@ -2,6 +2,32 @@ import { buildMonthGrid, type CalendarEvent } from '../lib/calendar-grid';
 
 const WEEKDAY_LABELS = ['일', '월', '화', '수', '목', '금', '토'];
 
+export function renderDayDetail(detailEl: HTMLElement, date: string, events: CalendarEvent[]): void {
+  detailEl.innerHTML = '';
+
+  const heading = document.createElement('p');
+  heading.className = 'guide-calendar__detail-heading';
+  heading.textContent = date;
+  detailEl.appendChild(heading);
+
+  if (events.length === 0) {
+    const empty = document.createElement('p');
+    empty.className = 'guide-calendar__detail-empty';
+    empty.textContent = '등록된 일정이 없습니다.';
+    detailEl.appendChild(empty);
+    return;
+  }
+
+  const list = document.createElement('ul');
+  list.className = 'guide-calendar__detail-list';
+  for (const event of events) {
+    const item = document.createElement('li');
+    item.textContent = event.title;
+    list.appendChild(item);
+  }
+  detailEl.appendChild(list);
+}
+
 export function renderCalendarMonth(
   container: HTMLElement,
   year: number,
@@ -47,6 +73,15 @@ export function renderCalendarMonth(
   const oldGrid = container.querySelector('.guide-calendar__grid');
   oldGrid?.remove();
 
+  let detail = container.querySelector<HTMLElement>('.guide-calendar__detail');
+  if (!detail) {
+    detail = document.createElement('div');
+    detail.className = 'guide-calendar__detail';
+  } else {
+    detail.remove();
+    detail.innerHTML = '';
+  }
+
   const grid = document.createElement('div');
   grid.className = 'guide-calendar__grid';
 
@@ -72,11 +107,18 @@ export function renderCalendarMonth(
         badge.textContent = event.title;
         cell.appendChild(badge);
       }
+      cell.addEventListener('click', () => {
+        grid.querySelectorAll('.guide-calendar__day').forEach((el) => {
+          delete (el as HTMLElement).dataset.selected;
+        });
+        cell.dataset.selected = 'true';
+        renderDayDetail(detail!, day.date, day.events);
+      });
     }
     grid.appendChild(cell);
   }
 
-  container.appendChild(grid);
+  container.append(grid, detail);
 
   prevButton.onclick = () => {
     const prevMonth = month === 1 ? 12 : month - 1;
