@@ -62,12 +62,23 @@ async function refreshPageList() {
   renderPageList(pages);
 }
 
+function setEditingEnabled(enabled) {
+  for (const id of ['page-title', 'page-description', 'page-body', 'save-button']) {
+    document.getElementById(id).disabled = !enabled;
+  }
+  document.querySelectorAll('#toolbar button').forEach((button) => {
+    button.disabled = !enabled;
+  });
+  document.getElementById('editor-hint').style.display = enabled ? 'none' : 'block';
+}
+
 async function loadPage(slug) {
   const page = await api.getPage(slug);
   currentSlug = slug;
   document.getElementById('page-title').value = page.title;
   document.getElementById('page-description').value = page.description ?? '';
   document.getElementById('page-body').value = page.body;
+  setEditingEnabled(true);
 }
 
 async function saveCurrentPage() {
@@ -160,6 +171,7 @@ function wireStaticControls() {
 
 async function init() {
   wireStaticControls();
+  setEditingEnabled(false);
   await refreshPageList();
 }
 
