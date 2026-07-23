@@ -22,7 +22,8 @@ export function renderCalendarMonth(
     prevButton = document.createElement('button');
     prevButton.type = 'button';
     prevButton.className = 'guide-calendar__prev';
-    prevButton.textContent = '이전 달';
+    prevButton.textContent = '◀';
+    prevButton.setAttribute('aria-label', '이전 달');
 
     label = document.createElement('span');
     label.className = 'guide-calendar__label';
@@ -30,7 +31,8 @@ export function renderCalendarMonth(
     nextButton = document.createElement('button');
     nextButton.type = 'button';
     nextButton.className = 'guide-calendar__next';
-    nextButton.textContent = '다음 달';
+    nextButton.textContent = '▶';
+    nextButton.setAttribute('aria-label', '다음 달');
 
     header.append(prevButton, label, nextButton);
     container.appendChild(header);

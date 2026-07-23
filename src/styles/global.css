@@ -8,6 +8,7 @@
   --color-bg: #FFFFFF;
   --color-bg-muted: #F4F6F8;
   --color-border: #D8DCE2;
+  --color-danger: #DE3412;
   --header-height: 64px;
 }
 
@@ -335,6 +336,19 @@ a:focus-visible {
 
 .guide-calendar__day:empty {
   border-color: transparent;
+}
+
+/* Sunday (1st column) in red, Saturday (7th column) in blue — the grid's
+   first 7 children are the weekday headers, then day cells continue in
+   the same 7-column sequence, so nth-child(7n±) lines up both rows. */
+.guide-calendar__weekday:nth-child(7n+1),
+.guide-calendar__day:nth-child(7n+1) {
+  color: var(--color-danger);
+}
+
+.guide-calendar__weekday:nth-child(7n),
+.guide-calendar__day:nth-child(7n) {
+  color: var(--color-secondary);
 }
 
 .guide-calendar__event {
