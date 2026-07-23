@@ -21,6 +21,13 @@ html {
      like the header, since overflow-x != visible forces overflow-y to
      compute as auto. */
   overflow-x: clip;
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
 }
 
 body {
@@ -44,6 +51,12 @@ img, svg, table, pre {
 h1 { font-size: 32px; }
 h2 { font-size: 24px; margin-top: 2.5rem; }
 h3 { font-size: 18px; margin-top: 2rem; }
+
+/* So a TOC anchor jump doesn't land the heading right under the sticky
+   header, hiding it. */
+h2, h3 {
+  scroll-margin-top: calc(var(--header-height) + 1rem);
+}
 
 a:focus-visible {
   outline: 2px solid var(--color-secondary);
