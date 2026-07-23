@@ -1,5 +1,5 @@
 import { api } from './api-client.js';
-import { insertAtCursor, SNIPPETS } from './toolbar.js';
+import { insertAtCursor, insertBlockAtCursor, SNIPPETS } from './toolbar.js';
 
 export function computeReorderPayload(slugsInDisplayOrder) {
   return slugsInDisplayOrder.map((slug, index) => ({ slug, order: index }));
@@ -93,7 +93,7 @@ function wireToolbar() {
   document.querySelectorAll('#toolbar [data-snippet]').forEach((button) => {
     button.addEventListener('click', () => {
       const snippet = SNIPPETS[button.dataset.snippet];
-      insertAtCursor(textarea, snippet.before, snippet.after);
+      insertBlockAtCursor(textarea, snippet.before, snippet.after);
     });
   });
 }
@@ -139,14 +139,14 @@ function wireUploadButtons() {
     const picked = await pickAndUpload('image');
     if (!picked) return;
     const { path } = await api.upload(picked.filename, picked.dataBase64, 'image');
-    insertAtCursor(document.getElementById('page-body'), `![설명](${path})`, '');
+    insertBlockAtCursor(document.getElementById('page-body'), `![설명](${path})`, '');
   });
 
   document.getElementById('attachment-button').addEventListener('click', async () => {
     const picked = await pickAndUpload('file');
     if (!picked) return;
     const { path } = await api.upload(picked.filename, picked.dataBase64, 'file');
-    insertAtCursor(document.getElementById('page-body'), `[${picked.filename}](${path})`, '');
+    insertBlockAtCursor(document.getElementById('page-body'), `[${picked.filename}](${path})`, '');
   });
 }
 

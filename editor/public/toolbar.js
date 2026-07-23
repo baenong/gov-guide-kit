@@ -4,8 +4,6 @@ export const SNIPPETS = {
   notice: { before: ':::notice\n', after: '\n:::' },
   warning: { before: ':::warning\n', after: '\n:::' },
   calendar: { before: ':::calendar\n- YYYY-MM-DD: ', after: '\n:::' },
-  orderedList: { before: '1. ', after: '' },
-  unorderedList: { before: '- ', after: '' },
 };
 
 export function insertAtCursor(textarea, before, after) {
@@ -19,4 +17,16 @@ export function insertAtCursor(textarea, before, after) {
   textarea.selectionStart = cursor;
   textarea.selectionEnd = cursor;
   textarea.focus();
+}
+
+/**
+ * Same as insertAtCursor, but forces the snippet onto its own new line
+ * first (unless the cursor is already at the start of a line). Used for
+ * block-level snippets (headings, callouts, calendar) — page links are
+ * the one exception that stays inline, since a link can appear mid-sentence.
+ */
+export function insertBlockAtCursor(textarea, before, after) {
+  const start = textarea.selectionStart;
+  const needsNewline = start > 0 && textarea.value[start - 1] !== '\n';
+  insertAtCursor(textarea, (needsNewline ? '\n' : '') + before, after);
 }

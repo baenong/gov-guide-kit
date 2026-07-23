@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { insertAtCursor, SNIPPETS } from '../editor/public/toolbar.js';
+import { insertAtCursor, insertBlockAtCursor, SNIPPETS } from '../editor/public/toolbar.js';
 
 function makeTextarea(value: string, cursorPos: number) {
   const textarea = document.createElement('textarea');
@@ -39,11 +39,29 @@ describe('SNIPPETS', () => {
     expect(SNIPPETS.calendar.before).toContain('- YYYY-MM-DD: ');
   });
 
-  it('defines heading, list, and warning snippets', () => {
+  it('defines heading and warning snippets', () => {
     expect(SNIPPETS.h2.before).toBe('## ');
     expect(SNIPPETS.h3.before).toBe('### ');
     expect(SNIPPETS.warning.before).toBe(':::warning\n');
-    expect(SNIPPETS.orderedList.before).toBe('1. ');
-    expect(SNIPPETS.unorderedList.before).toBe('- ');
+  });
+});
+
+describe('insertBlockAtCursor', () => {
+  it('prepends a newline when the cursor is mid-line', () => {
+    const textarea = makeTextarea('기존 문장', 5);
+    insertBlockAtCursor(textarea, '## 제목', '');
+    expect(textarea.value).toBe('기존 문장\n## 제목');
+  });
+
+  it('does not add an extra newline when the cursor is already at the start of a line', () => {
+    const textarea = makeTextarea('첫 줄\n', 4);
+    insertBlockAtCursor(textarea, '## 제목', '');
+    expect(textarea.value).toBe('첫 줄\n## 제목');
+  });
+
+  it('does not add a newline at the very start of an empty textarea', () => {
+    const textarea = makeTextarea('', 0);
+    insertBlockAtCursor(textarea, '## 제목', '');
+    expect(textarea.value).toBe('## 제목');
   });
 });
