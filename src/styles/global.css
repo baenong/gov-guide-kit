@@ -383,7 +383,10 @@ a:focus-visible {
 
   .guide-sidebar {
     position: fixed;
-    inset: 0 30% 0 0;
+    /* Starts below the sticky header (not 0) — the header sits on top
+       (z-index 30) so content from inset:0 would be hidden underneath it,
+       cutting off the first menu item. */
+    inset: var(--header-height) 30% 0 0;
     z-index: 20;
     background: var(--color-bg);
     transform: translateX(-100%);
