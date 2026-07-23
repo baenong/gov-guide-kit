@@ -2,7 +2,10 @@
 import { getCollection } from 'astro:content';
 
 const entries = (await getCollection('guide')).sort((a, b) => a.data.order - b.data.order);
-const currentPath = Astro.url.pathname;
+// Astro.url.pathname is percent-encoded for non-ASCII slugs (e.g. Korean),
+// but href below is built from the raw slug — decode so the comparison
+// below actually matches for those pages too.
+const currentPath = decodeURIComponent(Astro.url.pathname);
 
 function hrefFor(slug: string): string {
   return slug === 'index' ? '/' : `/guide/${slug}`;
