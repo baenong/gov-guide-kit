@@ -31,6 +31,7 @@ function sendJson(res, status, body) {
 export function createServer(projectRoot) {
   const guideDir = path.join(projectRoot, 'src/content/guide');
   const configPath = path.join(projectRoot, 'site.config.json');
+  const variablesPath = path.join(projectRoot, 'site.variables.json');
   const imagesDir = path.join(projectRoot, 'public/assets/images');
   const filesDir = path.join(projectRoot, 'public/assets/files');
 
@@ -145,6 +146,19 @@ export function createServer(projectRoot) {
       if (url.pathname === '/api/config' && req.method === 'PUT') {
         const body = await readJsonBody(req);
         await writeFile(configPath, `${JSON.stringify(body, null, 2)}\n`, 'utf-8');
+        return sendJson(res, 200, body);
+      }
+
+      if (url.pathname === '/api/variables' && req.method === 'GET') {
+        const raw = await readFile(variablesPath, 'utf-8');
+        res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
+        res.end(raw);
+        return;
+      }
+
+      if (url.pathname === '/api/variables' && req.method === 'PUT') {
+        const body = await readJsonBody(req);
+        await writeFile(variablesPath, `${JSON.stringify(body, null, 2)}\n`, 'utf-8');
         return sendJson(res, 200, body);
       }
 
