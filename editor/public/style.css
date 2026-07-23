@@ -157,8 +157,9 @@ body {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
+  justify-content: flex-end;
   gap: 0.35rem;
-  padding: 0.5rem 0;
+  padding: 0.5rem 0.5rem;
   font-size: 13px;
   border-bottom: 1px solid #eee;
   cursor: default;
