@@ -22,6 +22,7 @@ function renderPageList(pages) {
     item.draggable = true;
     item.dataset.slug = page.slug;
     item.textContent = page.title;
+    item.classList.toggle('is-active', page.slug === currentSlug);
 
     const deleteButton = document.createElement('button');
     deleteButton.type = 'button';
@@ -95,6 +96,7 @@ async function loadPage(slug) {
   document.getElementById('page-description').value = page.description ?? '';
   document.getElementById('page-body').value = page.body;
   setEditingEnabled(true);
+  renderPageList(cachedPages);
 }
 
 async function saveCurrentPage() {

@@ -39,7 +39,7 @@ body {
 .editor-sidebar ul {
   list-style: none;
   padding: 0;
-  margin: 1rem 0 0;
+  margin: 0.5rem 0 0;
   flex: 1;
   min-height: 0;
   overflow-y: auto;
@@ -60,6 +60,10 @@ body {
   align-items: center;
 }
 
+#page-list li.is-active {
+  border: 2px solid #1a73e8;
+}
+
 .editor-main {
   flex: 1;
   padding: 1rem;
@@ -74,7 +78,7 @@ body {
   gap: 0.25rem;
 }
 
-.editor-main input[type='text'],
+.editor-main input[type="text"],
 .editor-main textarea {
   width: 100%;
   box-sizing: border-box;
@@ -84,7 +88,7 @@ body {
   font-size: 14px;
 }
 
-.editor-main input[type='text']:disabled,
+.editor-main input[type="text"]:disabled,
 .editor-main textarea:disabled {
   background: #f5f5f5;
   color: #999;
@@ -97,14 +101,14 @@ body {
 #page-body {
   flex: 1;
   min-height: 400px;
-  font-family: 'Consolas', monospace;
+  font-family: "Consolas", monospace;
   font-size: 14px;
 }
 
 #save-button,
 #new-page-button,
-#variable-form button[type='submit'] {
-  padding: 0.6rem 1.5rem;
+#variable-form button[type="submit"] {
+  padding: 0.3rem 1.5rem;
   border: none;
   border-radius: 4px;
   background: #1a73e8;
@@ -116,11 +120,12 @@ body {
 
 #save-button {
   align-self: flex-start;
+  padding: 0.5rem 1.5rem;
 }
 
 #save-button:hover:not(:disabled),
 #new-page-button:hover,
-#variable-form button[type='submit']:hover {
+#variable-form button[type="submit"]:hover {
   background: #1558b0;
 }
 
@@ -144,7 +149,7 @@ body {
   flex-direction: column;
   gap: 0.35rem;
   flex-shrink: 0;
-  margin-bottom: 0.75rem;
+  margin-bottom: 0.5rem;
 }
 
 #variable-form input {
