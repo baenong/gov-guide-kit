@@ -192,6 +192,7 @@ function renderVariableList(variables) {
     insertButton.type = 'button';
     insertButton.textContent = '삽입';
     insertButton.addEventListener('click', () => {
+      if (!currentSlug) return;
       insertAtCursor(document.getElementById('page-body'), `{{${key}}}`, '');
     });
     item.appendChild(insertButton);
