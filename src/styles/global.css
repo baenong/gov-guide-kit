@@ -330,7 +330,7 @@ a:focus-visible {
 }
 
 .guide-calendar__day {
-  min-height: 72px;
+  height: 8vw;
   padding: 0.35rem;
   border: 1px solid var(--color-border);
   border-radius: 6px;
@@ -368,12 +368,22 @@ a:focus-visible {
 
 @media (max-width: 959px) {
   .guide-calendar__day {
-    min-height: 56px;
     font-size: 11px;
   }
 
+  /* Event titles get truncated illegibly at mobile cell sizes anyway, so
+     show a plain dot indicator instead — the text stays in the DOM for
+     screen readers, just visually hidden. */
   .guide-calendar__event {
-    font-size: 10px;
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    margin: 0.2rem 1px 0;
+    padding: 0;
+    border-radius: 50%;
+    font-size: 0;
+    overflow: hidden;
+    vertical-align: middle;
   }
 }
 
