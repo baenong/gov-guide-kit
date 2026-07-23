@@ -5,20 +5,48 @@ body {
 
 .editor-layout {
   display: flex;
-  min-height: 100vh;
+  height: 100vh;
 }
 
 .editor-sidebar {
   width: 240px;
   flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
   border-right: 1px solid #ccc;
+  overflow: hidden;
+}
+
+.editor-sidebar__pages,
+.editor-sidebar__variables {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
   padding: 1rem;
+  overflow: hidden;
+}
+
+.editor-sidebar__variables {
+  border-top: 2px solid #ccc;
+}
+
+.editor-sidebar__heading {
+  font-size: 14px;
+  margin: 0 0 0.5rem;
 }
 
 .editor-sidebar ul {
   list-style: none;
   padding: 0;
   margin: 1rem 0 0;
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+}
+
+.editor-sidebar__variables ul {
+  margin-top: 0;
 }
 
 .editor-sidebar li {
@@ -104,15 +132,18 @@ body {
   color: #555;
 }
 
-.editor-sidebar__heading {
-  font-size: 14px;
-  margin: 1rem 0 0.5rem;
+#variable-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  flex-shrink: 0;
 }
 
-#variable-list {
-  list-style: none;
-  padding: 0;
-  margin: 0 0 0.75rem;
+#variable-form input {
+  padding: 0.35rem 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 13px;
 }
 
 #variable-list li {
@@ -128,17 +159,5 @@ body {
 #variable-list li span {
   flex: 1;
   overflow-wrap: anywhere;
-}
-
-#variable-form {
-  display: flex;
-  flex-direction: column;
-  gap: 0.35rem;
-}
-
-#variable-form input {
-  padding: 0.35rem 0.5rem;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  font-size: 13px;
+  font-size: 12px;
 }
