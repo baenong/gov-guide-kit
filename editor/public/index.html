@@ -11,6 +11,14 @@
       <aside class="editor-sidebar">
         <button type="button" id="new-page-button">새 페이지</button>
         <ul id="page-list"></ul>
+        <hr />
+        <h2 class="editor-sidebar__heading">변수</h2>
+        <ul id="variable-list"></ul>
+        <form id="variable-form">
+          <input type="text" id="variable-key-input" placeholder="키 (예: 등록일)" />
+          <input type="text" id="variable-value-input" placeholder="값 (예: 2026-08-15)" />
+          <button type="submit">변수 추가</button>
+        </form>
       </aside>
       <main class="editor-main">
         <p id="editor-hint">왼쪽 목록에서 페이지를 선택하거나 "새 페이지"를 눌러주세요.</p>

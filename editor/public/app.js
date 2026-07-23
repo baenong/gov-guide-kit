@@ -11,6 +11,7 @@ export function isValidVariableKey(key) {
 
 let currentSlug = null;
 let cachedPages = [];
+let cachedVariables = {};
 
 function renderPageList(pages) {
   cachedPages = pages;
@@ -176,18 +177,90 @@ function wireUploadButtons() {
   });
 }
 
+function renderVariableList(variables) {
+  cachedVariables = variables;
+  const list = document.getElementById('variable-list');
+  list.innerHTML = '';
+  for (const [key, value] of Object.entries(variables)) {
+    const item = document.createElement('li');
+
+    const label = document.createElement('span');
+    label.textContent = `${key}: ${value}`;
+    item.appendChild(label);
+
+    const insertButton = document.createElement('button');
+    insertButton.type = 'button';
+    insertButton.textContent = '삽입';
+    insertButton.addEventListener('click', () => {
+      insertAtCursor(document.getElementById('page-body'), `{{${key}}}`, '');
+    });
+    item.appendChild(insertButton);
+
+    const editButton = document.createElement('button');
+    editButton.type = 'button';
+    editButton.textContent = '수정';
+    editButton.addEventListener('click', async () => {
+      const nextValue = prompt(`"${key}"의 새 값을 입력하세요`, value);
+      if (nextValue === null) return;
+      const updated = { ...cachedVariables, [key]: nextValue };
+      await api.saveVariables(updated);
+      await refreshVariables();
+    });
+    item.appendChild(editButton);
+
+    const deleteButton = document.createElement('button');
+    deleteButton.type = 'button';
+    deleteButton.textContent = '삭제';
+    deleteButton.addEventListener('click', async () => {
+      if (!confirm(`"${key}" 변수를 삭제할까요?`)) return;
+      const updated = { ...cachedVariables };
+      delete updated[key];
+      await api.saveVariables(updated);
+      await refreshVariables();
+    });
+    item.appendChild(deleteButton);
+
+    list.appendChild(item);
+  }
+}
+
+async function refreshVariables() {
+  const variables = await api.getVariables();
+  renderVariableList(variables);
+}
+
+function wireVariableForm() {
+  document.getElementById('variable-form').addEventListener('submit', async (event) => {
+    event.preventDefault();
+    const keyInput = document.getElementById('variable-key-input');
+    const valueInput = document.getElementById('variable-value-input');
+    const key = keyInput.value.trim();
+    if (!isValidVariableKey(key)) {
+      alert('올바르지 않은 변수 이름입니다. 빈 값이거나 {{, }}, 줄바꿈을 포함할 수 없습니다.');
+      return;
+    }
+    const updated = { ...cachedVariables, [key]: valueInput.value };
+    await api.saveVariables(updated);
+    keyInput.value = '';
+    valueInput.value = '';
+    await refreshVariables();
+  });
+}
+
 function wireStaticControls() {
   document.getElementById('save-button').addEventListener('click', saveCurrentPage);
   document.getElementById('new-page-button').addEventListener('click', createNewPage);
   wireToolbar();
   wirePageLinkButton();
   wireUploadButtons();
+  wireVariableForm();
 }
 
 async function init() {
   wireStaticControls();
   setEditingEnabled(false);
   await refreshPageList();
+  await refreshVariables();
 }
 
 if (typeof document !== 'undefined' && document.getElementById('page-list')) {
