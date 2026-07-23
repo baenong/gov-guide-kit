@@ -26,6 +26,9 @@ function renderPageList(pages) {
       event.stopPropagation();
       if (!confirm(`"${page.title}" 페이지를 삭제할까요?`)) return;
       await api.deletePage(page.slug);
+      if (page.slug === currentSlug) {
+        clearEditor();
+      }
       await refreshPageList();
     });
 
@@ -70,6 +73,14 @@ function setEditingEnabled(enabled) {
     button.disabled = !enabled;
   });
   document.getElementById('editor-hint').style.display = enabled ? 'none' : 'block';
+}
+
+function clearEditor() {
+  currentSlug = null;
+  document.getElementById('page-title').value = '';
+  document.getElementById('page-description').value = '';
+  document.getElementById('page-body').value = '';
+  setEditingEnabled(false);
 }
 
 async function loadPage(slug) {
