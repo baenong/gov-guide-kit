@@ -224,7 +224,10 @@ a:focus-visible {
   padding-left: 1.25rem;
 }
 
-.guide-toc__item--depth2:not(:first-child) {
+/* Only add breathing room before an H2 that directly follows H3
+   sub-items (a new section starting right after another section's
+   sub-headings) — an H2-only list (no H3s at all) stays tight. */
+.guide-toc__item--depth3 + .guide-toc__item--depth2 {
   margin-top: 0.75rem;
 }
 
