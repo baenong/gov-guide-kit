@@ -1,5 +1,6 @@
 export interface CalendarEvent {
   date: string;
+  endDate?: string;
   title: string;
 }
 
@@ -10,6 +11,17 @@ export interface CalendarDay {
   events: CalendarEvent[];
 }
 
+function eachDateInRange(start: string, end: string): string[] {
+  const dates: string[] = [];
+  let current = new Date(`${start}T00:00:00Z`);
+  const last = new Date(`${end}T00:00:00Z`);
+  while (current.getTime() <= last.getTime()) {
+    dates.push(current.toISOString().slice(0, 10));
+    current = new Date(current.getTime() + 24 * 60 * 60 * 1000);
+  }
+  return dates;
+}
+
 export function buildMonthGrid(year: number, month: number, events: CalendarEvent[]): CalendarDay[] {
   const firstOfMonth = new Date(Date.UTC(year, month - 1, 1));
   const startWeekday = firstOfMonth.getUTCDay();
@@ -17,9 +29,11 @@ export function buildMonthGrid(year: number, month: number, events: CalendarEven
 
   const eventsByDate = new Map<string, CalendarEvent[]>();
   for (const event of events) {
-    const list = eventsByDate.get(event.date) ?? [];
-    list.push(event);
-    eventsByDate.set(event.date, list);
+    for (const dateStr of eachDateInRange(event.date, event.endDate ?? event.date)) {
+      const list = eventsByDate.get(dateStr) ?? [];
+      list.push(event);
+      eventsByDate.set(dateStr, list);
+    }
   }
 
   const days: CalendarDay[] = [];

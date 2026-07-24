@@ -44,4 +44,20 @@ describe('remarkContainers', () => {
     expect(html).not.toContain('guide-callout');
     expect(html).not.toContain('guide-calendar');
   });
+
+  it('parses a date-range event line into date/endDate/title', () => {
+    const html = render(':::calendar\n- 2026-08-17~2026-08-19: 하계휴가\n:::');
+    const match = html.match(/data-events="([^"]*)"/)!;
+    const decoded = match[1].replace(/&#x22;/g, '"');
+    const events = JSON.parse(decoded);
+    expect(events).toEqual([{ date: '2026-08-17', endDate: '2026-08-19', title: '하계휴가' }]);
+  });
+
+  it('omits endDate for a single-day event line', () => {
+    const html = render(':::calendar\n- 2026-08-15: 임용등록 마감\n:::');
+    const match = html.match(/data-events="([^"]*)"/)!;
+    const decoded = match[1].replace(/&#x22;/g, '"');
+    const events = JSON.parse(decoded);
+    expect(events).toEqual([{ date: '2026-08-15', title: '임용등록 마감' }]);
+  });
 });

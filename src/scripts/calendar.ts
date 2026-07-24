@@ -2,6 +2,30 @@ import { buildMonthGrid, type CalendarEvent } from '../lib/calendar-grid';
 
 const WEEKDAY_LABELS = ['일', '월', '화', '수', '목', '금', '토'];
 
+export interface EventSegmentInfo {
+  isRange: boolean;
+  capStart: boolean;
+  capEnd: boolean;
+  showLabel: boolean;
+}
+
+/**
+ * A multi-day event renders as a bar made of one segment per day cell. This
+ * decides, for a given day/column, whether that segment is a true start/end
+ * of the event (rounded cap) or a true start/end of its week row (also
+ * capped, so the bar doesn't visually bleed into the next/previous row) —
+ * and whether to show the title text (only once, on the first segment).
+ */
+export function eventSegmentInfo(event: CalendarEvent, date: string, columnIndex: number): EventSegmentInfo {
+  const isRange = Boolean(event.endDate && event.endDate !== event.date);
+  if (!isRange) {
+    return { isRange: false, capStart: true, capEnd: true, showLabel: true };
+  }
+  const capStart = date === event.date || columnIndex === 0;
+  const capEnd = date === event.endDate || columnIndex === 6;
+  return { isRange: true, capStart, capEnd, showLabel: capStart };
+}
+
 export function renderDayDetail(detailEl: HTMLElement, date: string, events: CalendarEvent[]): void {
   detailEl.innerHTML = '';
 
@@ -92,7 +116,7 @@ export function renderCalendarMonth(
     grid.appendChild(cell);
   }
 
-  for (const day of days) {
+  for (const [index, day] of days.entries()) {
     const cell = document.createElement('div');
     cell.className = 'guide-calendar__day';
     if (day.inCurrentMonth) {
@@ -101,10 +125,18 @@ export function renderCalendarMonth(
       dayNumber.className = 'guide-calendar__day-number';
       dayNumber.textContent = String(day.dayOfMonth);
       cell.appendChild(dayNumber);
+      const columnIndex = index % 7;
       for (const event of day.events) {
         const badge = document.createElement('span');
         badge.className = 'guide-calendar__event';
-        badge.textContent = event.title;
+        const segment = eventSegmentInfo(event, day.date, columnIndex);
+        if (segment.isRange) {
+          badge.classList.add('guide-calendar__event--range');
+          if (segment.capStart) badge.classList.add('guide-calendar__event--cap-start');
+          if (segment.capEnd) badge.classList.add('guide-calendar__event--cap-end');
+        }
+        badge.textContent = segment.showLabel ? event.title : '';
+        badge.setAttribute('aria-label', event.title);
         cell.appendChild(badge);
       }
       cell.addEventListener('click', () => {

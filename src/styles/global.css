@@ -373,6 +373,30 @@ a:focus-visible {
   overflow-wrap: break-word;
 }
 
+/* A multi-day event's bar spans several day cells as separate DOM elements
+   (one per cell). Bridging the grid's 4px gap and each cell's own padding
+   pixel-perfectly would need a non-grid layout, so we settle for a close
+   approximation: each segment fills its cell's full width (bleeding into
+   the padding via negative margin) and stays square-edged except at the
+   event's true start/end (or a week-row boundary), which get a rounded cap. */
+.guide-calendar__event--range {
+  margin-left: -0.35rem;
+  margin-right: -0.35rem;
+  border-radius: 0;
+}
+
+.guide-calendar__event--range.guide-calendar__event--cap-start {
+  margin-left: 0;
+  border-top-left-radius: 4px;
+  border-bottom-left-radius: 4px;
+}
+
+.guide-calendar__event--range.guide-calendar__event--cap-end {
+  margin-right: 0;
+  border-top-right-radius: 4px;
+  border-bottom-right-radius: 4px;
+}
+
 .guide-calendar__day[data-day] {
   cursor: pointer;
 }

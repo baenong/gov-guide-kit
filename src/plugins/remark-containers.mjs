@@ -1,7 +1,7 @@
 import { visit } from 'unist-util-visit';
 
 const CALLOUT_TYPES = new Set(['notice', 'warning']);
-const EVENT_LINE = /^(\d{4}-\d{2}-\d{2}):\s*(.+)$/;
+const EVENT_LINE = /^(\d{4}-\d{2}-\d{2})(?:~(\d{4}-\d{2}-\d{2}))?:\s*(.+)$/;
 
 function extractText(node) {
   let text = '';
@@ -17,7 +17,8 @@ function extractEvents(containerNode) {
     const line = extractText(item).trim();
     const match = line.match(EVENT_LINE);
     if (match) {
-      events.push({ date: match[1], title: match[2] });
+      const [, date, endDate, title] = match;
+      events.push(endDate ? { date, endDate, title } : { date, title });
     }
   });
   return events;

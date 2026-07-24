@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach } from 'vitest';
-import { renderCalendarMonth, initCalendars } from '../src/scripts/calendar';
+import { renderCalendarMonth, initCalendars, eventSegmentInfo } from '../src/scripts/calendar';
 
 function setupDom(eventsJson: string) {
   document.body.innerHTML = `
@@ -67,5 +67,46 @@ describe('clicking a day cell', () => {
     cell10.click();
     expect(cell10.dataset.selected).toBe('true');
     expect(cell15.dataset.selected).toBeUndefined();
+  });
+});
+
+describe('eventSegmentInfo', () => {
+  it('treats a single-day event as its own fully-capped segment', () => {
+    const event = { date: '2026-08-15', title: '임용등록 마감' };
+    expect(eventSegmentInfo(event, '2026-08-15', 3)).toEqual({
+      isRange: false,
+      capStart: true,
+      capEnd: true,
+      showLabel: true,
+    });
+  });
+
+  it('caps only the true start/end of a range that stays within one week row', () => {
+    // 2026-08-17/18/19 are Mon/Tue/Wed — columns 1/2/3, no week wrap.
+    const event = { date: '2026-08-17', endDate: '2026-08-19', title: '하계휴가' };
+    expect(eventSegmentInfo(event, '2026-08-17', 1)).toEqual({
+      isRange: true, capStart: true, capEnd: false, showLabel: true,
+    });
+    expect(eventSegmentInfo(event, '2026-08-18', 2)).toEqual({
+      isRange: true, capStart: false, capEnd: false, showLabel: false,
+    });
+    expect(eventSegmentInfo(event, '2026-08-19', 3)).toEqual({
+      isRange: true, capStart: false, capEnd: true, showLabel: false,
+    });
+  });
+
+  it('adds a week-boundary cap even mid-range so the bar does not bleed into the next/prev row', () => {
+    // 2026-08-14 (Fri, col 5) ~ 2026-08-17 (Mon, col 1), crossing a week row.
+    const event = { date: '2026-08-14', endDate: '2026-08-17', title: '연휴' };
+    // Saturday (col 6) is the last column of its row -> gets a capEnd even
+    // though the event doesn't actually end there.
+    expect(eventSegmentInfo(event, '2026-08-15', 6)).toEqual({
+      isRange: true, capStart: false, capEnd: true, showLabel: false,
+    });
+    // Sunday (col 0) is the first column of the next row -> gets a capStart
+    // (and, since it's the start of a visual segment, shows the label again).
+    expect(eventSegmentInfo(event, '2026-08-16', 0)).toEqual({
+      isRange: true, capStart: true, capEnd: false, showLabel: true,
+    });
   });
 });
