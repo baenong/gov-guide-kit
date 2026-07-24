@@ -9,6 +9,7 @@
   <body>
     <div class="editor-layout">
       <aside class="editor-sidebar">
+        <button type="button" id="site-config-button" class="editor-sidebar__site-config">사이트 설정</button>
         <div class="editor-sidebar__pages">
           <button type="button" id="new-page-button">새 페이지</button>
           <ul id="page-list"></ul>
@@ -41,6 +42,20 @@
         <button type="button" id="save-button">저장</button>
       </main>
     </div>
+    <dialog id="site-config-dialog">
+      <form id="site-config-form">
+        <h2>사이트 설정</h2>
+        <label>기관명 <input type="text" id="config-org-name" /></label>
+        <label>기본 색상 <input type="color" id="config-color-primary" /></label>
+        <label>보조 색상 <input type="color" id="config-color-secondary" /></label>
+        <label>강조 색상 <input type="color" id="config-color-accent" /></label>
+        <label>로고 경로 <input type="text" id="config-logo-path" placeholder="/assets/logo.svg" /></label>
+        <div class="site-config-dialog__actions">
+          <button type="button" id="site-config-cancel">취소</button>
+          <button type="submit">저장</button>
+        </div>
+      </form>
+    </dialog>
     <script type="module" src="/app.js"></script>
   </body>
 </html>

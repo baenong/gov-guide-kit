@@ -17,6 +17,22 @@ body {
   overflow: hidden;
 }
 
+.editor-sidebar__site-config {
+  flex-shrink: 0;
+  margin: 1rem 1rem 0;
+  padding: 0.5rem 1rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background: #fff;
+  color: #333;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.editor-sidebar__site-config:hover {
+  background: #f5f5f5;
+}
+
 .editor-sidebar__pages,
 .editor-sidebar__variables {
   flex: 1;
@@ -187,5 +203,85 @@ body {
 }
 
 #variable-list li button:hover {
+  background: #f5f5f5;
+}
+
+#site-config-dialog {
+  width: 320px;
+  padding: 1.5rem;
+  border: none;
+  border-radius: 8px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+}
+
+#site-config-dialog::backdrop {
+  background: rgba(0, 0, 0, 0.4);
+}
+
+#site-config-dialog h2 {
+  margin: 0 0 1rem;
+  font-size: 16px;
+}
+
+#site-config-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+#site-config-form label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  font-size: 13px;
+}
+
+#site-config-form input[type='text'] {
+  padding: 0.4rem 0.6rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 13px;
+}
+
+#site-config-form input[type='color'] {
+  width: 100%;
+  height: 36px;
+  padding: 0;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.site-config-dialog__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.site-config-dialog__actions button {
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 4px;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.site-config-dialog__actions button[type='submit'] {
+  background: #1a73e8;
+  color: #fff;
+  font-weight: 600;
+}
+
+.site-config-dialog__actions button[type='submit']:hover {
+  background: #1558b0;
+}
+
+#site-config-cancel {
+  background: #fff;
+  border: 1px solid #ccc;
+}
+
+#site-config-cancel:hover {
   background: #f5f5f5;
 }

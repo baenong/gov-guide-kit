@@ -250,6 +250,40 @@ function wireVariableForm() {
   });
 }
 
+function wireSiteConfigDialog() {
+  const dialog = document.getElementById('site-config-dialog');
+  const form = document.getElementById('site-config-form');
+
+  document.getElementById('site-config-button').addEventListener('click', async () => {
+    const config = await api.getConfig();
+    document.getElementById('config-org-name').value = config.orgName ?? '';
+    document.getElementById('config-color-primary').value = config.colors?.primary ?? '#000000';
+    document.getElementById('config-color-secondary').value = config.colors?.secondary ?? '#000000';
+    document.getElementById('config-color-accent').value = config.colors?.accent ?? '#000000';
+    document.getElementById('config-logo-path').value = config.logoPath ?? '';
+    dialog.showModal();
+  });
+
+  document.getElementById('site-config-cancel').addEventListener('click', () => {
+    dialog.close();
+  });
+
+  form.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    const updated = {
+      orgName: document.getElementById('config-org-name').value,
+      colors: {
+        primary: document.getElementById('config-color-primary').value,
+        secondary: document.getElementById('config-color-secondary').value,
+        accent: document.getElementById('config-color-accent').value,
+      },
+      logoPath: document.getElementById('config-logo-path').value,
+    };
+    await api.saveConfig(updated);
+    dialog.close();
+  });
+}
+
 function wireStaticControls() {
   document.getElementById('save-button').addEventListener('click', saveCurrentPage);
   document.getElementById('new-page-button').addEventListener('click', createNewPage);
@@ -257,6 +291,7 @@ function wireStaticControls() {
   wirePageLinkButton();
   wireUploadButtons();
   wireVariableForm();
+  wireSiteConfigDialog();
 }
 
 async function init() {
