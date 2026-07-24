@@ -7,8 +7,21 @@ const entries = (await getCollection('guide')).sort((a, b) => a.data.order - b.d
 // below actually matches for those pages too.
 const currentPath = decodeURIComponent(Astro.url.pathname);
 
+// import.meta.env.BASE_URL is Astro's configured `base` (e.g. '/' at the
+// site root, or '/repo-name/' under GitHub/GitLab Pages) — strip the
+// trailing slash so we can consistently append our own leading slash below.
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+
 function hrefFor(slug: string): string {
-  return slug === 'index' ? '/' : `/guide/${slug}`;
+  return slug === 'index' ? `${base}/` : `${base}/guide/${slug}`;
+}
+
+// Strip a trailing slash before comparing so it doesn't matter whether
+// Astro.url.pathname or hrefFor's output happens to include one — under a
+// non-root base, the index route's pathname has no trailing slash while
+// hrefFor('index') always ends in one.
+function normalize(path: string): string {
+  return path.length > 1 && path.endsWith('/') ? path.slice(0, -1) : path;
 }
 ---
 <div class="guide-sidebar__backdrop" data-open="false"></div>
@@ -16,7 +29,7 @@ function hrefFor(slug: string): string {
   <ul class="guide-sidebar__list">
     {entries.map((entry) => {
       const href = hrefFor(entry.slug);
-      const isCurrent = currentPath === href || currentPath === `${href}/`;
+      const isCurrent = normalize(currentPath) === normalize(href);
       return (
         <li>
           <a href={href} aria-current={isCurrent ? 'page' : undefined}>{entry.data.title}</a>

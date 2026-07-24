@@ -4,10 +4,12 @@ interface Props {
   logoPath: string;
 }
 const { orgName, logoPath } = Astro.props;
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const logoSrc = logoPath.startsWith('/') ? `${base}${logoPath}` : logoPath;
 ---
 <header class="guide-header">
-  <a class="guide-header__brand" href="/">
-    <img src={logoPath} alt={`${orgName} 로고`} class="guide-header__logo" />
+  <a class="guide-header__brand" href={`${base}/`}>
+    <img src={logoSrc} alt={`${orgName} 로고`} class="guide-header__logo" />
     <span class="guide-header__org">{orgName}</span>
   </a>
   <button
