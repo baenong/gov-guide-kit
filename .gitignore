@@ -3,3 +3,14 @@ dist/
 .astro/
 .vercel/
 docs/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# logs / env
+*.log
+.env
+.env.*
