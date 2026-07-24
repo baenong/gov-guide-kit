@@ -19,7 +19,7 @@
   "devDependencies": {
     "@types/node": "^20.14.0",
     "jsdom": "^24.1.0",
-    "linkinator": "^6.0.4",
+    "linkinator": "^8.0.2",
     "rehype-stringify": "^10.0.0",
     "remark-directive": "^3.0.0",
     "remark-parse": "^11.0.0",
