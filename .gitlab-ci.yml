@@ -1,0 +1,37 @@
+image: node:20
+
+stages:
+  - test
+  - deploy
+
+variables:
+  # Default GitLab Pages base path for a regular project (served at
+  # https://<group>.gitlab.io/<project>/). If this repo is the special
+  # top-level "<namespace>.gitlab.io" pages project instead (served at
+  # https://<namespace>.gitlab.io/), override GITLAB_PAGES_BASE to "/"
+  # in the project's CI/CD variables settings.
+  GITLAB_PAGES_BASE: "/$CI_PROJECT_NAME"
+
+test:
+  stage: test
+  script:
+    - npm ci
+    - npm run test
+
+pages:
+  stage: deploy
+  script:
+    - npm ci
+    - DEPLOY_TARGET=gitlab-pages npm run build
+    - npm run test:links
+    # The repo's own public/ (Astro's static-asset source folder) has
+    # already been consumed into dist/ by the build above — remove it
+    # before renaming dist/ to public/, the name GitLab Pages requires
+    # for the deploy artifact.
+    - rm -rf public
+    - mv dist public
+  artifacts:
+    paths:
+      - public
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
