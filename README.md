@@ -1,12 +1,12 @@
 # gov-guide-kit
 
-공공기관이 복사해서 쓰는 재사용 가능한 안내 사이트 템플릿입니다. 로그인·검색·백엔드 없이, 마크다운(또는 GUI 에디터)으로 작성한 콘텐츠를 KRDS 스타일의 정적 사이트로 자동 변환해 GitHub Pages 또는 Vercel에 배포합니다.
+공공기관이 복사해서 쓰는 재사용 가능한 안내 사이트 템플릿입니다. 로그인·검색·백엔드 없이, 마크다운(또는 GUI 에디터)으로 작성한 콘텐츠를 KRDS 스타일의 정적 사이트로 자동 변환해 Vercel, GitHub Pages, GitLab Pages 중 원하는 곳에 배포합니다.
 
 ## 전체 흐름 한눈에 보기
 
 1. 이 저장소를 복사한다 (GitHub "Use this template" 또는 Fork)
 2. `site.config.json`에 기관명·색상·로고를 적어 우리 기관 사이트로 만든다
-3. Vercel 또는 GitHub Pages 중 하나를 연결한다 (한 번만 하면 됨)
+3. Vercel, GitHub Pages, GitLab Pages 중 하나를 연결한다 (한 번만 하면 됨)
 4. `npm run editor`로 로컬 GUI 에디터를 열어 페이지 내용을 작성한다 (마크다운 문법 몰라도 됨)
 5. 변경사항을 저장(`git push`)하면 몇 분 안에 실제 웹사이트에 반영된다
 
@@ -36,7 +36,7 @@ GitHub에서 이 저장소를 열고 우측 상단의 **"Use this template"** �
 
 GitHub 웹사이트에서 `site.config.json` 파일을 열어 연필(수정) 아이콘을 누르면 코드를 몰라도 수정 후 바로 커밋할 수 있습니다.
 
-## 3단계. 배포 연결하기 (최초 1회, 둘 중 하나 선택)
+## 3단계. 배포 연결하기 (최초 1회, 셋 중 하나 선택)
 
 ### 옵션 A: Vercel (추천 — 설정이 더 간단함)
 
@@ -49,6 +49,12 @@ GitHub 웹사이트에서 `site.config.json` 파일을 열어 연필(수정) 아
 1. 저장소의 **Settings → Pages**로 이동합니다.
 2. "Build and deployment" 항목의 소스를 **GitHub Actions**로 지정합니다.
 3. 저장소에 이미 포함된 `.github/workflows/deploy.yml`이 `main` 브랜치에 push할 때마다 자동으로 빌드/배포합니다. 진행 상황은 저장소의 **Actions** 탭에서 확인할 수 있습니다.
+
+### 옵션 C: GitLab Pages (GitLab에 올리는 경우)
+
+1. 저장소를 GitHub 대신(또는 추가로) GitLab에도 push합니다.
+2. 저장소에 이미 포함된 `.gitlab-ci.yml`이 기본 브랜치에 push할 때마다 자동으로 빌드/배포합니다. 진행 상황은 GitLab의 **CI/CD → Pipelines**에서 확인할 수 있습니다.
+3. 저장소 이름이 일반 프로젝트라면 별도 설정이 필요 없습니다. 다만 이 저장소가 GitLab의 특수 "그룹/네임스페이스 전용 Pages 프로젝트"(`<네임스페이스>.gitlab.io`라는 이름의 저장소)라면, 프로젝트의 **Settings → CI/CD → Variables**에서 `GITLAB_PAGES_BASE` 값을 `/`로 추가해야 합니다.
 
 ## 4단계. 콘텐츠 작성하기
 
@@ -134,7 +140,7 @@ GitHub 웹사이트에서 `site.config.json` 파일을 열어 연필(수정) 아
 
 ## 5단계. 변경사항을 실제 웹사이트에 반영하기
 
-에디터에서 "저장"을 누르거나 `.md` 파일을 직접 고친 것만으로는 실제 웹사이트가 바뀌지 않습니다. 변경사항을 GitHub 저장소에 올려야(push) 3단계에서 연결한 Vercel 또는 GitHub Pages가 자동으로 새로 빌드합니다.
+에디터에서 "저장"을 누르거나 `.md` 파일을 직접 고친 것만으로는 실제 웹사이트가 바뀌지 않습니다. 변경사항을 저장소에 올려야(push) 3단계에서 연결한 Vercel/GitHub Pages/GitLab Pages가 자동으로 새로 빌드합니다.
 
 - **GitHub Desktop을 쓰는 경우**: 변경된 파일 목록이 자동으로 보입니다. 하단에 커밋 메시지(예: "임용등록 안내 페이지 수정")를 적고 "Commit to main" → "Push origin"을 누르면 끝입니다.
 - **터미널을 쓰는 경우**:
@@ -145,7 +151,7 @@ GitHub 웹사이트에서 `site.config.json` 파일을 열어 연필(수정) 아
   git push
   ```
 
-이후 Vercel은 1~2분 내로, GitHub Pages는 저장소의 **Actions** 탭에서 진행 상황을 확인할 수 있습니다.
+이후 Vercel은 1~2분 내로, GitHub Pages는 저장소의 **Actions** 탭에서, GitLab Pages는 **CI/CD → Pipelines**에서 진행 상황을 확인할 수 있습니다.
 
 ## 개발자용 로컬 명령어
 
