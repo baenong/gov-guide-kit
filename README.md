@@ -1,6 +1,25 @@
-# gov-guide-kit
+<p align="center">
+  <img src="./.github/assets/brightness.svg" width="128">
+</p>
 
-공공기관이 복사해서 쓰는 재사용 가능한 안내 사이트 템플릿입니다. 로그인·검색·백엔드 없이, 마크다운(또는 GUI 에디터)으로 작성한 콘텐츠를 KRDS 스타일의 정적 사이트로 자동 변환해 Vercel, GitHub Pages, GitLab Pages 중 원하는 곳에 배포합니다.
+<hr>
+
+<h1 align="center">gov-guide-kit</h1>
+
+<p align="center">
+  <i>코드 한 줄 몰라도, 공공기관 민원 안내 사이트를 만듭니다</i>
+  <br>
+  <br>공공기관이 복사해서 쓰는 재사용 가능한 안내 사이트 템플릿입니다.
+  <br>로그인·검색·백엔드 없이, 마크다운(또는 GUI 에디터)으로 작성한 콘텐츠를 KRDS 스타일의 정적 사이트로 자동 변환해 배포합니다.
+</p>
+
+<p align="center">
+  <a href="https://astro.build/"><img src="https://img.shields.io/badge/Astro-4-BC52EE.svg?logo=astro&logoColor=white" /></a>
+  <a href="https://www.typescriptlang.org/"><img src="https://img.shields.io/badge/TypeScript-5.5-3178C6.svg?logo=typescript&logoColor=white" /></a>
+  <img src="https://img.shields.io/badge/Node-20-339933.svg?logo=node.js&logoColor=white" />
+  <a href="https://vitest.dev/"><img src="https://img.shields.io/badge/Vitest-tested-6E9F18.svg?logo=vitest&logoColor=white" /></a>
+  <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/License-MIT-green.svg" alt="License: MIT" /></a>
+</p>
 
 ## 전체 흐름 한눈에 보기
 
