@@ -1,5 +1,5 @@
 {
-  "name": "krds-guide-site",
+  "name": "gov-guide-kit",
   "description": "공공기관용 KRDS 스타일 민원 안내 사이트 템플릿 (Astro 기반, 로컬 GUI 에디터 포함)",
   "license": "MIT",
   "keywords": ["krds", "astro", "government", "template", "boilerplate"],
