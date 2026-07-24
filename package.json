@@ -2,7 +2,13 @@
   "name": "gov-guide-kit",
   "description": "공공기관용 KRDS 스타일 민원 안내 사이트 템플릿 (Astro 기반, 로컬 GUI 에디터 포함)",
   "license": "MIT",
-  "keywords": ["krds", "astro", "government", "template", "boilerplate"],
+  "keywords": [
+    "krds",
+    "astro",
+    "government",
+    "template",
+    "boilerplate"
+  ],
   "private": true,
   "type": "module",
   "scripts": {
@@ -28,7 +34,7 @@
     "typescript": "^5.5.0",
     "unified": "^11.0.5",
     "unist-util-visit": "^5.0.0",
-    "vitest": "^2.0.0",
+    "vitest": "^4.1.10",
     "zod": "^3.23.0"
   }
 }
