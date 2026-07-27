@@ -22,6 +22,10 @@ html {
      like the header, since overflow-x != visible forces overflow-y to
      compute as auto. */
   overflow-x: clip;
+  /* Always reserve the vertical scrollbar's width, even on pages short
+     enough not to need it, so content doesn't shift a few pixels wider
+     depending on whether a given page happens to scroll. */
+  scrollbar-gutter: stable;
 }
 
 body {
