@@ -2,14 +2,17 @@
 interface Props {
   orgName: string;
   logoPath: string;
+  logoBackground?: boolean;
 }
-const { orgName, logoPath } = Astro.props;
+const { orgName, logoPath, logoBackground = false } = Astro.props;
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const logoSrc = logoPath.startsWith('/') ? `${base}${logoPath}` : logoPath;
 ---
 <header class="guide-header">
   <a class="guide-header__brand" href={`${base}/`}>
-    <img src={logoSrc} alt={`${orgName} 로고`} class="guide-header__logo" />
+    <span class:list={['guide-header__logo-wrap', { 'guide-header__logo-wrap--boxed': logoBackground }]}>
+      <img src={logoSrc} alt={`${orgName} 로고`} class="guide-header__logo" />
+    </span>
     <span class="guide-header__org">{orgName}</span>
   </a>
   <button

@@ -352,6 +352,7 @@ function wireSiteConfigDialog() {
     document.getElementById('config-color-secondary').value = config.colors?.secondary ?? '#000000';
     document.getElementById('config-color-accent').value = config.colors?.accent ?? '#000000';
     document.getElementById('config-logo-path').value = config.logoPath ?? '';
+    document.getElementById('config-logo-background').checked = config.logoBackground ?? false;
     dialog.showModal();
   });
 
@@ -369,6 +370,7 @@ function wireSiteConfigDialog() {
         accent: document.getElementById('config-color-accent').value,
       },
       logoPath: document.getElementById('config-logo-path').value,
+      logoBackground: document.getElementById('config-logo-background').checked,
     };
     await api.saveConfig(updated);
     dialog.close();

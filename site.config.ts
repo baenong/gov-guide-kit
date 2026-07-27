@@ -8,6 +8,7 @@ export interface SiteConfig {
     accent: string;
   };
   logoPath: string;
+  logoBackground?: boolean;
 }
 
 export default data as SiteConfig;

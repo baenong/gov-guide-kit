@@ -166,6 +166,15 @@ a:focus-visible {
 .guide-header__logo {
   height: 32px;
   width: auto;
+  display: block;
+}
+
+.guide-header__logo-wrap--boxed {
+  display: flex;
+  align-items: center;
+  padding: 0.25rem 0.4rem;
+  background: #FFFFFF;
+  border-radius: 4px;
 }
 
 .guide-layout {
