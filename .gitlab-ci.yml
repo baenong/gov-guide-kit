@@ -15,13 +15,13 @@ variables:
 test:
   stage: test
   script:
-    - npm ci
+    - npm install
     - npm run test
 
 pages:
   stage: deploy
   script:
-    - npm ci
+    - npm install
     - DEPLOY_TARGET=gitlab-pages npm run build
     - npm run test:links
     # The repo's own public/ (Astro's static-asset source folder) has
