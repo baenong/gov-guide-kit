@@ -2,6 +2,7 @@ import { defineConfig } from 'astro/config';
 import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import remarkDirective from 'remark-directive';
+import remarkBreaks from 'remark-breaks';
 import { remarkContainers } from './src/plugins/remark-containers.mjs';
 import { remarkVariables } from './src/plugins/remark-variables.mjs';
 import { rehypeAttachments } from './src/plugins/rehype-attachments.mjs';
@@ -36,7 +37,7 @@ export default defineConfig({
   site: SITE_BY_TARGET[deployTarget] ?? SITE_BY_TARGET.vercel,
   base: resolvedBase,
   markdown: {
-    remarkPlugins: [remarkDirective, [remarkVariables, siteVariables], remarkContainers],
+    remarkPlugins: [remarkDirective, [remarkVariables, siteVariables], remarkContainers, remarkBreaks],
     rehypePlugins: [rehypeAttachments, rehypeImages, [rehypeBasePath, { base: resolvedBase }]],
   },
 });
