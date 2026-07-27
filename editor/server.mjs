@@ -14,6 +14,7 @@ const STATIC_FILES = {
   '/app.js': { file: 'public/app.js', type: 'text/javascript; charset=utf-8' },
   '/api-client.js': { file: 'public/api-client.js', type: 'text/javascript; charset=utf-8' },
   '/toolbar.js': { file: 'public/toolbar.js', type: 'text/javascript; charset=utf-8' },
+  '/table-builder.js': { file: 'public/table-builder.js', type: 'text/javascript; charset=utf-8' },
 };
 
 async function readJsonBody(req) {
