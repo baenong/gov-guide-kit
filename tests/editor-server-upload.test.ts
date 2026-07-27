@@ -72,4 +72,29 @@ describe('POST /api/upload', () => {
     const { path: resultPath } = await res.json();
     expect(resultPath).toBe('/assets/images/.._.._evil.png');
   });
+
+  it('replaces whitespace in the filename with hyphens', async () => {
+    const dataBase64 = Buffer.from('data').toString('base64');
+    const res = await fetch(`${baseUrl}/api/upload`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ filename: '첨부 파일 목록.pdf', dataBase64, kind: 'file' }),
+    });
+    const { path: resultPath } = await res.json();
+    expect(resultPath).toBe('/assets/files/첨부-파일-목록.pdf');
+
+    const written = await readFile(path.join(tmpRoot, 'public/assets/files/첨부-파일-목록.pdf'));
+    expect(written.toString()).toBe('data');
+  });
+
+  it('collapses multiple consecutive spaces into a single hyphen', async () => {
+    const dataBase64 = Buffer.from('data').toString('base64');
+    const res = await fetch(`${baseUrl}/api/upload`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ filename: 'a   b.png', dataBase64, kind: 'image' }),
+    });
+    const { path: resultPath } = await res.json();
+    expect(resultPath).toBe('/assets/images/a-b.png');
+  });
 });

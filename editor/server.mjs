@@ -170,7 +170,7 @@ export function createServer(projectRoot) {
         const targetDir = kind === 'image' ? imagesDir : filesDir;
         const publicSubdir = kind === 'image' ? 'images' : 'files';
         await mkdir(targetDir, { recursive: true });
-        const safeName = filename.replace(/[\\/]/g, '_');
+        const safeName = filename.replace(/[\\/]/g, '_').replace(/\s+/g, '-');
         await writeFile(path.join(targetDir, safeName), Buffer.from(dataBase64, 'base64'));
         return sendJson(res, 201, { path: `/assets/${publicSubdir}/${safeName}` });
       }
