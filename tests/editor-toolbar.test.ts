@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { insertAtCursor, insertBlockAtCursor, SNIPPETS } from '../editor/public/toolbar.js';
+import { insertAtCursor, insertBlockAtCursor, wrapSelection, SNIPPETS } from '../editor/public/toolbar.js';
 
 function makeTextarea(value: string, cursorPos: number) {
   const textarea = document.createElement('textarea');
@@ -63,5 +63,25 @@ describe('insertBlockAtCursor', () => {
     const textarea = makeTextarea('', 0);
     insertBlockAtCursor(textarea, '## 제목', '');
     expect(textarea.value).toBe('## 제목');
+  });
+});
+
+describe('wrapSelection', () => {
+  it('wraps a selection with a colored span', () => {
+    const textarea = makeTextarea('안녕하세요', 0);
+    textarea.selectionStart = 0;
+    textarea.selectionEnd = 2;
+    wrapSelection(textarea, '#DE3412');
+    expect(textarea.value).toBe('<span style="color: #DE3412">안녕</span>하세요');
+  });
+
+  it('inserts a placeholder and selects it when there is no selection', () => {
+    const textarea = makeTextarea('시작', 2);
+    wrapSelection(textarea, '#018FD7');
+    expect(textarea.value).toBe('시작<span style="color: #018FD7">내용</span>');
+    const before = '<span style="color: #018FD7">';
+    expect(textarea.selectionStart).toBe(2 + before.length);
+    expect(textarea.selectionEnd).toBe(2 + before.length + 2);
+    expect(textarea.value.slice(textarea.selectionStart, textarea.selectionEnd)).toBe('내용');
   });
 });

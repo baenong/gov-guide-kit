@@ -1,5 +1,5 @@
 import { api } from './api-client.js';
-import { insertAtCursor, insertBlockAtCursor, SNIPPETS } from './toolbar.js';
+import { insertAtCursor, insertBlockAtCursor, wrapSelection, SNIPPETS } from './toolbar.js';
 
 export function computeReorderPayload(slugsInDisplayOrder) {
   return slugsInDisplayOrder.map((slug, index) => ({ slug, order: index }));
@@ -141,6 +141,15 @@ function wirePageLinkButton() {
     const href = target.slug === 'index' ? '/' : `/guide/${target.slug}`;
     const textarea = document.getElementById('page-body');
     insertAtCursor(textarea, `[${target.title}](${href})`, '');
+  });
+}
+
+function wireColorButtons() {
+  const textarea = document.getElementById('page-body');
+  document.querySelectorAll('.color-swatch').forEach((button) => {
+    button.addEventListener('click', () => {
+      wrapSelection(textarea, button.dataset.color);
+    });
   });
 }
 
@@ -289,6 +298,7 @@ function wireStaticControls() {
   document.getElementById('new-page-button').addEventListener('click', createNewPage);
   wireToolbar();
   wirePageLinkButton();
+  wireColorButtons();
   wireUploadButtons();
   wireVariableForm();
   wireSiteConfigDialog();

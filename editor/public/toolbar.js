@@ -30,3 +30,18 @@ export function insertBlockAtCursor(textarea, before, after) {
   const needsNewline = start > 0 && textarea.value[start - 1] !== '\n';
   insertAtCursor(textarea, (needsNewline ? '\n' : '') + before, after);
 }
+
+export function wrapSelection(textarea, colorHex) {
+  const start = textarea.selectionStart;
+  const end = textarea.selectionEnd;
+  const hasSelection = start !== end;
+  const before = `<span style="color: ${colorHex}">`;
+  const after = '</span>';
+  if (!hasSelection) {
+    insertAtCursor(textarea, `${before}내용${after}`, '');
+    textarea.selectionStart = start + before.length;
+    textarea.selectionEnd = start + before.length + '내용'.length;
+    return;
+  }
+  insertAtCursor(textarea, before, after);
+}
