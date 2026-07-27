@@ -8,6 +8,7 @@ import { rehypeAttachments } from './src/plugins/rehype-attachments.mjs';
 import { rehypeImages } from './src/plugins/rehype-images.mjs';
 import { rehypeBasePath } from './src/plugins/rehype-base-path.mjs';
 import { viteWatchVariables } from './src/plugins/vite-watch-variables.mjs';
+import { resolveBase } from './scripts/deploy-base.mjs';
 
 const deployTarget = process.env.DEPLOY_TARGET ?? 'vercel';
 
@@ -17,15 +18,9 @@ const SITE_BY_TARGET = {
   'gitlab-pages': 'https://example.gitlab.io',
 };
 
-const BASE_BY_TARGET = {
-  vercel: '/',
-  'github-pages': process.env.GITHUB_PAGES_BASE ?? '/',
-  'gitlab-pages': process.env.GITLAB_PAGES_BASE ?? '/',
-};
-
 const siteVariablesPath = fileURLToPath(new URL('./site.variables.json', import.meta.url));
 
-const resolvedBase = BASE_BY_TARGET[deployTarget] ?? BASE_BY_TARGET.vercel;
+const resolvedBase = resolveBase();
 
 export default defineConfig({
   site: SITE_BY_TARGET[deployTarget] ?? SITE_BY_TARGET.vercel,

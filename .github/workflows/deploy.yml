@@ -28,7 +28,10 @@ jobs:
           DEPLOY_TARGET: github-pages
           GITHUB_PAGES_BASE: /${{ github.event.repository.name }}
         run: npm run build
-      - run: npm run test:links
+      - env:
+          DEPLOY_TARGET: github-pages
+          GITHUB_PAGES_BASE: /${{ github.event.repository.name }}
+        run: npm run test:links
       - uses: actions/upload-pages-artifact@v3
         with:
           path: dist

@@ -23,7 +23,7 @@ pages:
   script:
     - npm install
     - DEPLOY_TARGET=gitlab-pages npm run build
-    - npm run test:links
+    - DEPLOY_TARGET=gitlab-pages npm run test:links
     # The repo's own public/ (Astro's static-asset source folder) has
     # already been consumed into dist/ by the build above — remove it
     # before renaming dist/ to public/, the name GitLab Pages requires

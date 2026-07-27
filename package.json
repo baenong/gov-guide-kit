@@ -16,7 +16,7 @@
     "build": "tsx scripts/check-contrast.ts && astro build",
     "preview": "astro preview",
     "test": "vitest run",
-    "test:links": "linkinator dist --recurse",
+    "test:links": "node scripts/check-links.mjs",
     "editor": "node editor/server.mjs"
   },
   "dependencies": {
