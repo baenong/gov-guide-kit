@@ -126,6 +126,12 @@ async function createNewPage() {
   await loadPage(page.slug);
 }
 
+function wireBoldButton() {
+  document.getElementById('bold-button').addEventListener('click', () => {
+    insertAtCursor(document.getElementById('page-body'), '**', '**');
+  });
+}
+
 function wireToolbar() {
   const textarea = document.getElementById('page-body');
   document.querySelectorAll('#toolbar [data-snippet]').forEach((button) => {
@@ -372,6 +378,7 @@ function wireSiteConfigDialog() {
 function wireStaticControls() {
   document.getElementById('save-button').addEventListener('click', saveCurrentPage);
   document.getElementById('new-page-button').addEventListener('click', createNewPage);
+  wireBoldButton();
   wireToolbar();
   wirePageLinkButton();
   wireColorButtons();
