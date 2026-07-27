@@ -2,6 +2,14 @@ import { buildMonthGrid, type CalendarEvent } from '../lib/calendar-grid';
 
 const WEEKDAY_LABELS = ['일', '월', '화', '수', '목', '금', '토'];
 
+function todayDateString(): string {
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = String(now.getMonth() + 1).padStart(2, '0');
+  const day = String(now.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+}
+
 export interface EventSegmentInfo {
   isRange: boolean;
   capStart: boolean;
@@ -116,11 +124,16 @@ export function renderCalendarMonth(
     grid.appendChild(cell);
   }
 
+  const today = todayDateString();
+
   for (const [index, day] of days.entries()) {
     const cell = document.createElement('div');
     cell.className = 'guide-calendar__day';
     if (day.inCurrentMonth) {
       cell.dataset.day = String(day.dayOfMonth);
+      if (day.date === today) {
+        cell.dataset.today = 'true';
+      }
       const dayNumber = document.createElement('span');
       dayNumber.className = 'guide-calendar__day-number';
       dayNumber.textContent = String(day.dayOfMonth);

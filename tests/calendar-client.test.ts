@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach } from 'vitest';
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { renderCalendarMonth, initCalendars, eventSegmentInfo } from '../src/scripts/calendar';
 
 function setupDom(eventsJson: string) {
@@ -23,6 +23,31 @@ describe('renderCalendarMonth', () => {
     const continuationCell = container.querySelector<HTMLElement>('[data-day="18"]')!;
     const badge = continuationCell.querySelector('.guide-calendar__event')!;
     expect(badge.textContent).not.toBe('');
+  });
+});
+
+describe('today highlighting', () => {
+  afterEach(() => {
+    vi.useRealTimers();
+  });
+
+  it('marks the cell matching the real current date', () => {
+    vi.useFakeTimers();
+    vi.setSystemTime(new Date(2026, 7, 15, 12, 0, 0));
+    const container = document.createElement('div');
+    renderCalendarMonth(container, 2026, 8, []);
+    const todayCell = container.querySelector('[data-day="15"]')!;
+    expect(todayCell.getAttribute('data-today')).toBe('true');
+    const otherCell = container.querySelector('[data-day="14"]')!;
+    expect(otherCell.hasAttribute('data-today')).toBe(false);
+  });
+
+  it('does not mark any cell as today when viewing a different month', () => {
+    vi.useFakeTimers();
+    vi.setSystemTime(new Date(2026, 7, 15, 12, 0, 0));
+    const container = document.createElement('div');
+    renderCalendarMonth(container, 2026, 9, []);
+    expect(container.querySelector('[data-today]')).toBeNull();
   });
 });
 

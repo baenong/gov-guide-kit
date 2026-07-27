@@ -432,6 +432,10 @@ a:focus-visible {
   cursor: pointer;
 }
 
+.guide-calendar__day[data-today='true'] {
+  border: 2px solid var(--color-accent);
+}
+
 .guide-calendar__day[data-selected='true'] {
   border: 2px solid var(--color-primary);
 }
