@@ -14,6 +14,16 @@ describe('renderCalendarMonth', () => {
     expect(container.textContent).toContain('임용등록 마감');
     expect(container.querySelectorAll('[data-day]').length).toBeGreaterThan(27);
   });
+
+  it('gives every segment of a multi-day event non-empty badge content so all segments render at the same height', () => {
+    const container = document.createElement('div');
+    renderCalendarMonth(container, 2026, 8, [
+      { date: '2026-08-17', endDate: '2026-08-19', title: '하계휴가' },
+    ]);
+    const continuationCell = container.querySelector<HTMLElement>('[data-day="18"]')!;
+    const badge = continuationCell.querySelector('.guide-calendar__event')!;
+    expect(badge.textContent).not.toBe('');
+  });
 });
 
 describe('initCalendars', () => {

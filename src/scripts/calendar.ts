@@ -135,7 +135,12 @@ export function renderCalendarMonth(
           if (segment.capStart) badge.classList.add('guide-calendar__event--cap-start');
           if (segment.capEnd) badge.classList.add('guide-calendar__event--cap-end');
         }
-        badge.textContent = segment.showLabel ? event.title : '';
+        // A literal empty string leaves the badge with no line box at all
+        // (just its padding), so a continuation segment renders visibly
+        // shorter than the labeled segment next to it — a thin line instead
+        // of a matching bar. A non-breaking space keeps the line box (and
+        // so the height) consistent while staying visually blank.
+        badge.textContent = segment.showLabel ? event.title : ' ';
         badge.setAttribute('aria-label', event.title);
         cell.appendChild(badge);
       }
