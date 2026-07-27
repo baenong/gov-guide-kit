@@ -1,5 +1,14 @@
 import { api } from './api-client.js';
 import { insertAtCursor, insertBlockAtCursor, wrapSelection, SNIPPETS } from './toolbar.js';
+import {
+  createTableState,
+  addRow,
+  removeRow,
+  addColumn,
+  removeColumn,
+  setCell,
+  toMarkdownTable,
+} from './table-builder.js';
 
 export function computeReorderPayload(slugsInDisplayOrder) {
   return slugsInDisplayOrder.map((slug, index) => ({ slug, order: index }));
@@ -153,6 +162,73 @@ function wireColorButtons() {
   });
 }
 
+let tableState = null;
+
+function renderTableGrid() {
+  const container = document.getElementById('table-grid');
+  container.innerHTML = '';
+  const table = document.createElement('table');
+  tableState.forEach((row, rowIndex) => {
+    const tr = document.createElement('tr');
+    row.forEach((cellValue, colIndex) => {
+      const td = document.createElement('td');
+      const input = document.createElement('input');
+      input.type = 'text';
+      input.value = cellValue;
+      input.addEventListener('input', () => {
+        tableState = setCell(tableState, rowIndex, colIndex, input.value);
+      });
+      td.appendChild(input);
+      tr.appendChild(td);
+    });
+    table.appendChild(tr);
+  });
+  container.appendChild(table);
+
+  document.getElementById('table-remove-row').disabled = tableState.length <= 1;
+  document.getElementById('table-remove-col').disabled = tableState[0].length <= 1;
+}
+
+function wireTableDialog() {
+  const dialog = document.getElementById('table-dialog');
+
+  document.getElementById('table-button').addEventListener('click', () => {
+    tableState = createTableState(2, 3);
+    renderTableGrid();
+    dialog.showModal();
+  });
+
+  document.getElementById('table-add-row').addEventListener('click', () => {
+    tableState = addRow(tableState);
+    renderTableGrid();
+  });
+
+  document.getElementById('table-remove-row').addEventListener('click', () => {
+    tableState = removeRow(tableState, tableState.length - 1);
+    renderTableGrid();
+  });
+
+  document.getElementById('table-add-col').addEventListener('click', () => {
+    tableState = addColumn(tableState);
+    renderTableGrid();
+  });
+
+  document.getElementById('table-remove-col').addEventListener('click', () => {
+    tableState = removeColumn(tableState, tableState[0].length - 1);
+    renderTableGrid();
+  });
+
+  document.getElementById('table-cancel').addEventListener('click', () => {
+    dialog.close();
+  });
+
+  document.getElementById('table-insert').addEventListener('click', () => {
+    const markdown = toMarkdownTable(tableState);
+    insertBlockAtCursor(document.getElementById('page-body'), markdown, '');
+    dialog.close();
+  });
+}
+
 function pickAndUpload(kind) {
   return new Promise((resolve) => {
     const input = document.createElement('input');
@@ -299,6 +375,7 @@ function wireStaticControls() {
   wireToolbar();
   wirePageLinkButton();
   wireColorButtons();
+  wireTableDialog();
   wireUploadButtons();
   wireVariableForm();
   wireSiteConfigDialog();
