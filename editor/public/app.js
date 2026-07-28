@@ -18,6 +18,12 @@ export function isValidVariableKey(key) {
   return typeof key === 'string' && key.trim().length > 0 && !key.includes('{{') && !key.includes('}}') && !key.includes('\n');
 }
 
+export function previewUrlFor(slug, previewPort) {
+  if (!previewPort) return null;
+  const path = slug === 'index' ? '/' : `/guide/${slug}`;
+  return `http://localhost:${previewPort}${path}`;
+}
+
 let currentSlug = null;
 let cachedPages = [];
 let cachedVariables = {};

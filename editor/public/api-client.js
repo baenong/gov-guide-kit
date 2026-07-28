@@ -42,6 +42,7 @@ export const api = {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ filename, dataBase64, kind }),
     }),
+  getPreviewPort: () => request('/api/preview-port'),
   getVariables: () => request('/api/variables'),
   saveVariables: (variables) =>
     request('/api/variables', {
