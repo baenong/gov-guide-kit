@@ -16,7 +16,7 @@
 <p align="center">
   <a href="https://astro.build/"><img src="https://img.shields.io/badge/Astro-4-BC52EE.svg?logo=astro&logoColor=white" /></a>
   <a href="https://www.typescriptlang.org/"><img src="https://img.shields.io/badge/TypeScript-5.5-3178C6.svg?logo=typescript&logoColor=white" /></a>
-  <img src="https://img.shields.io/badge/Node-20-339933.svg?logo=node.js&logoColor=white" />
+  <img src="https://img.shields.io/badge/Node-22-339933.svg?logo=node.js&logoColor=white" />
   <a href="https://vitest.dev/"><img src="https://img.shields.io/badge/Vitest-tested-6E9F18.svg?logo=vitest&logoColor=white" /></a>
   <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/License-MIT-green.svg" alt="License: MIT" /></a>
 </p>
@@ -43,15 +43,17 @@ GitHub에서 이 저장소를 열고 우측 상단의 **"Use this template"** �
 {
   "orgName": "기관명",
   "colors": { "primary": "#1A2D65", "secondary": "#018FD7", "accent": "#7AC38E" },
-  "logoPath": "/assets/logo.svg"
+  "logoPath": "/assets/logo.svg",
+  "logoBackground": false
 }
 ```
 
-> 코드 편집이 부담스럽다면, 4단계의 로컬 GUI 에디터를 실행한 뒤 좌측 상단 **"사이트 설정"** 버튼으로도 같은 항목(기관명·색상·로고 경로)을 화면에서 수정할 수 있습니다.
+> 코드 편집이 부담스럽다면, 4단계의 로컬 GUI 에디터를 실행한 뒤 좌측 상단 **"사이트 설정"** 버튼으로도 같은 항목(기관명·색상·로고 경로·로고 배경)을 화면에서 수정할 수 있습니다.
 
 - `orgName`: 헤더에 표시될 기관명
 - `colors`: 사이트 전체에 쓰이는 주요 색상 (기본색/보조색/강조색)
 - `logoPath`: 로고 이미지 경로. `public/assets/` 폴더에 로고 파일을 넣고 그 경로를 적습니다 (예: `public/assets/logo.svg`에 파일을 두면 `/assets/logo.svg`).
+- `logoBackground`: 헤더 색과 로고 색이 비슷해 로고가 잘 안 보일 때 `true`로 설정하면 로고 뒤에 흰색 배경을 깔아줍니다 (생략하면 `false`).
 
 GitHub 웹사이트에서 `site.config.json` 파일을 열어 연필(수정) 아이콘을 누르면 코드를 몰라도 수정 후 바로 커밋할 수 있습니다.
 
@@ -81,7 +83,7 @@ GitHub 웹사이트에서 `site.config.json` 파일을 열어 연필(수정) 아
 
 마크다운 문법을 몰라도 화면에서 버튼을 눌러 콘텐츠를 작성할 수 있는 도구가 포함되어 있습니다.
 
-1. 컴퓨터에 [Node.js](https://nodejs.org) (20 이상)를 설치합니다.
+1. 컴퓨터에 [Node.js](https://nodejs.org) (22 이상)를 설치합니다.
 2. 저장소를 내 컴퓨터에 내려받습니다 (GitHub Desktop을 쓰면 명령어 없이 가능합니다).
 3. 터미널(또는 GitHub Desktop의 "Open in Terminal")에서 아래 명령을 한 번 실행합니다.
 
@@ -95,11 +97,12 @@ GitHub 웹사이트에서 `site.config.json` 파일을 열어 연필(수정) 아
    npm run editor
    ```
 
-   브라우저가 자동으로 열리며 `http://localhost:4322`에서 에디터 화면이 나타납니다.
+   브라우저가 자동으로 열리며 `http://localhost:4322`에서 에디터 화면이 나타납니다. 이때 실제 사이트를 미리 볼 수 있는 서버(`http://localhost:4321`)도 함께 자동으로 실행되어, 화면 오른쪽 패널에 실시간 미리보기가 함께 표시됩니다.
 
-5. 왼쪽에서 페이지를 선택하거나 "새 페이지"로 새로 만듭니다. 제목/설명/본문을 입력하고, 툴바 버튼(중제목·소제목·공지·주의·캘린더·페이지 링크·이미지·첨부파일)을 눌러 서식을 삽입합니다.
+5. 왼쪽에서 페이지를 선택하거나 "새 페이지"로 새로 만듭니다. 제목/설명/본문을 입력하고, 툴바 버튼(굵게·중제목·소제목·공지·주의·캘린더·표·글자색·페이지 링크·이미지·첨부파일)을 눌러 마크다운 문법을 몰라도 서식을 삽입할 수 있습니다.
 6. 반복해서 쓰이는 값(등록 마감일 등)은 왼쪽 사이드바 하단의 "변수" 섹션에서 한 번만 등록해두면, "삽입" 버튼으로 아무 페이지에나 가져다 쓸 수 있습니다. 값을 나중에 바꾸면 그 변수를 쓰는 모든 페이지가 함께 갱신됩니다.
-7. 작성이 끝나면 "저장" 버튼을 누릅니다. (이 저장은 내 컴퓨터의 파일에만 반영됩니다 — 실제 웹사이트에 올리려면 아래 5단계가 필요합니다.)
+7. 오른쪽 미리보기 패널 상단의 **PC / 모바일 / 전체화면** 버튼으로, 실제 PC·모바일 화면에서 어떻게 보이는지 축소된 크기로 바로 확인할 수 있습니다.
+8. 작성이 끝나면 "저장" 버튼을 누릅니다. 오른쪽 미리보기가 곧바로 최신 내용으로 새로고침됩니다. (이 저장은 아직 내 컴퓨터의 파일에만 반영됩니다 — 실제 웹사이트에 올리려면 아래 5단계가 필요합니다.)
 
 ### 방법 2: `.md` 파일 직접 편집 (개발자 또는 GitHub 웹 화면에서 직접 수정하고 싶은 경우)
 
@@ -150,7 +153,16 @@ GitHub 웹사이트에서 `site.config.json` 파일을 열어 연필(수정) 아
    ```
 
 6. 이미지는 일반 마크다운 문법을 씁니다(경로는 반드시 `/`로 시작): `![설명](/assets/images/파일명.png)`
-7. 반복해서 쓰이는 값은 `site.variables.json`에 한 번만 적어두고, 본문에서는 `{{등록일}}`처럼 참조합니다.
+7. 굵은 글씨는 `**내용**`처럼 별표 두 개로 감쌉니다.
+8. 표는 일반 마크다운 표 문법을 그대로 씁니다.
+
+   ```md
+   | 이름 | 나이 |
+   | --- | --- |
+   | 홍길동 | 30 |
+   ```
+
+9. 반복해서 쓰이는 값은 `site.variables.json`에 한 번만 적어두고, 본문에서는 `{{등록일}}`처럼 참조합니다.
 
    ```json
    { "등록일": "2026-08-15" }
@@ -198,7 +210,7 @@ scripts/update-from-template.ps1
 ```bash
 npm install
 npm run dev        # 미리보기: http://localhost:4321
-npm run editor      # 로컬 GUI 에디터: http://localhost:4322
+npm run editor      # 로컬 GUI 에디터(http://localhost:4322) + 미리보기 서버를 함께 실행
 npm run build       # 정적 빌드 (front matter/색상 대비 오류가 있으면 표시됨)
 npm run test        # 단위 테스트
 npm run test:links  # 빌드 산출물의 깨진 링크 검사
