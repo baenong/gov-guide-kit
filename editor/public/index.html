@@ -49,8 +49,19 @@
         <button type="button" id="save-button">저장</button>
       </main>
       <div class="editor-preview">
-        <h2 class="editor-preview__heading">미리보기</h2>
-        <iframe id="preview-frame" title="미리보기"></iframe>
+        <div class="editor-preview__toolbar">
+          <h2 class="editor-preview__heading">미리보기</h2>
+          <div class="editor-preview__modes">
+            <button type="button" data-preview-mode="desktop">PC</button>
+            <button type="button" data-preview-mode="mobile">모바일</button>
+            <button type="button" data-preview-mode="full" class="is-active">전체화면</button>
+          </div>
+        </div>
+        <div id="preview-viewport">
+          <div id="preview-device">
+            <iframe id="preview-frame" title="미리보기"></iframe>
+          </div>
+        </div>
       </div>
     </div>
     <dialog id="site-config-dialog">

@@ -29,6 +29,52 @@ export function computeDeviceScale(panelWidth, intrinsicWidth) {
   return Math.min(1, panelWidth / intrinsicWidth);
 }
 
+const PREVIEW_DEVICE_SIZES = {
+  desktop: { width: 1280, height: 720 },
+  mobile: { width: 360, height: 800 },
+};
+
+let previewMode = 'full';
+
+function applyPreviewMode() {
+  const device = document.getElementById('preview-device');
+  const frame = document.getElementById('preview-frame');
+
+  if (previewMode === 'full') {
+    device.style.width = '';
+    device.style.height = '';
+    frame.style.width = '';
+    frame.style.height = '';
+    frame.style.transform = '';
+    return;
+  }
+
+  const size = PREVIEW_DEVICE_SIZES[previewMode];
+  const panelWidth = document.getElementById('preview-viewport').clientWidth;
+  const scale = computeDeviceScale(panelWidth, size.width);
+
+  device.style.width = `${size.width * scale}px`;
+  device.style.height = `${size.height * scale}px`;
+  frame.style.width = `${size.width}px`;
+  frame.style.height = `${size.height}px`;
+  frame.style.transform = `scale(${scale})`;
+}
+
+function wirePreviewModeButtons() {
+  const buttons = document.querySelectorAll('[data-preview-mode]');
+  buttons.forEach((button) => {
+    button.addEventListener('click', () => {
+      previewMode = button.dataset.previewMode;
+      buttons.forEach((b) => b.classList.toggle('is-active', b === button));
+      applyPreviewMode();
+    });
+  });
+
+  new ResizeObserver(() => applyPreviewMode()).observe(
+    document.getElementById('preview-viewport'),
+  );
+}
+
 let currentSlug = null;
 let cachedPages = [];
 let cachedVariables = {};
@@ -414,6 +460,7 @@ function wireStaticControls() {
   wirePageLinkButton();
   wireColorButtons();
   wireTableDialog();
+  wirePreviewModeButtons();
   wireUploadButtons();
   wireVariableForm();
   wireSiteConfigDialog();
