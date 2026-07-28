@@ -8,6 +8,11 @@ import { uniqueSlug } from './lib/slug.mjs';
 
 const EDITOR_DIR = path.dirname(fileURLToPath(import.meta.url));
 
+export function parseLocalPort(text) {
+  const match = text.match(/localhost:(\d+)/);
+  return match ? Number(match[1]) : null;
+}
+
 const STATIC_FILES = {
   '/': { file: 'public/index.html', type: 'text/html; charset=utf-8' },
   '/style.css': { file: 'public/style.css', type: 'text/css; charset=utf-8' },
@@ -29,7 +34,7 @@ function sendJson(res, status, body) {
   res.end(JSON.stringify(body));
 }
 
-export function createServer(projectRoot) {
+export function createServer(projectRoot, previewPortState = { port: null }) {
   const guideDir = path.join(projectRoot, 'src/content/guide');
   const configPath = path.join(projectRoot, 'site.config.json');
   const variablesPath = path.join(projectRoot, 'site.variables.json');
@@ -174,6 +179,10 @@ export function createServer(projectRoot) {
         const safeName = filename.replace(/[\\/]/g, '_').replace(/\s+/g, '-');
         await writeFile(path.join(targetDir, safeName), Buffer.from(dataBase64, 'base64'));
         return sendJson(res, 201, { path: `/assets/${publicSubdir}/${safeName}` });
+      }
+
+      if (url.pathname === '/api/preview-port' && req.method === 'GET') {
+        return sendJson(res, 200, { port: previewPortState.port });
       }
 
       sendJson(res, 404, { error: 'Not found' });
