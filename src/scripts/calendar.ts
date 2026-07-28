@@ -134,6 +134,9 @@ export function renderCalendarMonth(
       if (day.date === today) {
         cell.dataset.today = 'true';
       }
+      if (day.events.length > 0) {
+        cell.dataset.hasEvent = 'true';
+      }
       const dayNumber = document.createElement('span');
       dayNumber.className = 'guide-calendar__day-number';
       dayNumber.textContent = String(day.dayOfMonth);

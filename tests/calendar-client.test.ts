@@ -24,6 +24,15 @@ describe('renderCalendarMonth', () => {
     const badge = continuationCell.querySelector('.guide-calendar__event')!;
     expect(badge.textContent).not.toBe('');
   });
+
+  it('marks a day cell as having an event, for the narrow-viewport cell-tint fallback', () => {
+    const container = document.createElement('div');
+    renderCalendarMonth(container, 2026, 8, [{ date: '2026-08-15', title: '임용등록 마감' }]);
+    const eventCell = container.querySelector<HTMLElement>('[data-day="15"]')!;
+    expect(eventCell.dataset.hasEvent).toBe('true');
+    const otherCell = container.querySelector<HTMLElement>('[data-day="14"]')!;
+    expect(otherCell.dataset.hasEvent).toBeUndefined();
+  });
 });
 
 describe('today highlighting', () => {
