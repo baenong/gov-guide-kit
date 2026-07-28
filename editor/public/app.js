@@ -24,6 +24,11 @@ export function previewUrlFor(slug, previewPort) {
   return `http://localhost:${previewPort}${path}`;
 }
 
+export function computeDeviceScale(panelWidth, intrinsicWidth) {
+  if (panelWidth <= 0) return 1;
+  return Math.min(1, panelWidth / intrinsicWidth);
+}
+
 let currentSlug = null;
 let cachedPages = [];
 let cachedVariables = {};
