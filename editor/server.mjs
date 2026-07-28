@@ -2,7 +2,7 @@ import http from 'node:http';
 import { readFile, writeFile, readdir, unlink, mkdir } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
-import { exec } from 'node:child_process';
+import { exec, spawn } from 'node:child_process';
 import { parseFrontmatter, serializeFrontmatter } from './lib/frontmatter.mjs';
 import { uniqueSlug } from './lib/slug.mjs';
 
@@ -204,10 +204,37 @@ function openBrowser(url) {
 }
 
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
-  const server = createServer(process.cwd());
+  const projectRoot = process.cwd();
+  const previewPortState = { port: null };
+
+  console.log('[editor] astro dev를 함께 시작합니다...');
+  // A single command string (no separate args array) run through the shell —
+  // Windows needs a shell to resolve npm.cmd, and passing args separately
+  // alongside shell: true is what triggers Node's escaping-related deprecation
+  // warning, which a single pre-composed string avoids entirely.
+  const devProcess = spawn('npm run dev', {
+    cwd: projectRoot,
+    shell: true,
+  });
+  devProcess.stdout.on('data', (chunk) => {
+    const text = chunk.toString();
+    process.stdout.write(`[astro] ${text}`);
+    const port = parseLocalPort(text);
+    if (port) previewPortState.port = port;
+  });
+  devProcess.stderr.on('data', (chunk) => {
+    process.stderr.write(`[astro] ${chunk}`);
+  });
+
+  const server = createServer(projectRoot, previewPortState);
   server.listen(PORT, () => {
     const url = `http://localhost:${PORT}`;
     console.log(`[editor] ${url} 에서 실행 중입니다.`);
     openBrowser(url);
+  });
+
+  process.on('SIGINT', () => {
+    devProcess.kill();
+    process.exit(0);
   });
 }
