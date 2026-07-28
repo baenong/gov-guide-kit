@@ -27,6 +27,7 @@ export function previewUrlFor(slug, previewPort) {
 let currentSlug = null;
 let cachedPages = [];
 let cachedVariables = {};
+let previewPort = null;
 
 function renderPageList(pages) {
   cachedPages = pages;
@@ -96,6 +97,15 @@ function setEditingEnabled(enabled) {
   document.getElementById('editor-hint').style.display = enabled ? 'none' : 'block';
 }
 
+async function refreshPreviewPort() {
+  const { port } = await api.getPreviewPort();
+  if (port) {
+    previewPort = port;
+    return;
+  }
+  setTimeout(refreshPreviewPort, 500);
+}
+
 function clearEditor() {
   currentSlug = null;
   document.getElementById('page-title').value = '';
@@ -112,6 +122,10 @@ async function loadPage(slug) {
   document.getElementById('page-body').value = page.body;
   setEditingEnabled(true);
   renderPageList(cachedPages);
+  const url = previewUrlFor(slug, previewPort);
+  if (url) {
+    document.getElementById('preview-frame').src = url;
+  }
 }
 
 async function saveCurrentPage() {
@@ -122,6 +136,10 @@ async function saveCurrentPage() {
     body: document.getElementById('page-body').value,
   });
   await refreshPageList();
+  const frame = document.getElementById('preview-frame');
+  if (frame.src) {
+    frame.src = frame.src;
+  }
 }
 
 async function createNewPage() {
@@ -401,6 +419,7 @@ async function init() {
   setEditingEnabled(false);
   await refreshPageList();
   await refreshVariables();
+  refreshPreviewPort();
 }
 
 if (typeof document !== 'undefined' && document.getElementById('page-list')) {
